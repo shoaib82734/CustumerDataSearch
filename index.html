@@ -53,19 +53,6 @@
       box-sizing: border-box;
     }
 
-    button {
-      background-color: #2e7d32;
-      color: white;
-      cursor: pointer;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 5px;
-    }
-
-    button:hover {
-      background-color: #1b5e20;
-    }
-
     .menu {
       position: fixed;
       top: 60px;
@@ -126,7 +113,7 @@
       <input type="text" id="search" placeholder="Search by name..." onkeyup="searchCustomer()" />
     </div>
 
-    <table id="customerTable">
+    <table id="customerTable" style="margin-top: 2rem; width: 100%; display:none;">
       <thead>
         <tr>
           <th>Name</th>
@@ -159,26 +146,28 @@
       { name: "Jane Smith", phone: "0987654321", email: "jane@example.com", address: "456 Oak St" }
     ];
 
-    function displayCustomers(data) {
+    // Function to search customers
+    function searchCustomer() {
+      const query = document.getElementById("search").value;
+      google.script.run.withSuccessHandler(displayCustomers).searchCustomers(query);
+    }
+
+    // Function to display customer data from Google Sheets
+    function displayCustomers(customers) {
       const tableBody = document.getElementById("customerTable").querySelector("tbody");
       tableBody.innerHTML = "";
-      data.forEach((cust) => {
+      customers.forEach((customer) => {
         const row = `<tr>
-            <td>${cust.name}</td>
-            <td>${cust.phone}</td>
-            <td>${cust.email}</td>
-            <td>${cust.address}</td>
+            <td>${customer[0]}</td>
+            <td>${customer[1]}</td>
+            <td>${customer[2]}</td>
+            <td>${customer[3]}</td>
           </tr>`;
         tableBody.innerHTML += row;
       });
-    }
 
-    function searchCustomer() {
-      const query = document.getElementById("search").value.toLowerCase();
-      const filtered = customers.filter(c =>
-        c.name.toLowerCase().includes(query)
-      );
-      displayCustomers(filtered);
+      // Show the table if data is available
+      document.getElementById("customerTable").style.display = customers.length > 0 ? 'table' : 'none';
     }
 
     // Toggle the side menu visibility
@@ -186,9 +175,6 @@
       const menu = document.getElementById("sideMenu");
       menu.classList.toggle("active");
     }
-
-    // Display all customers on page load
-    displayCustomers(customers);
   </script>
 </body>
 </html>
