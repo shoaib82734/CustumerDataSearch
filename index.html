@@ -173,6 +173,54 @@
       text-align: center;
     }
 
+    /* About Us Page */
+    #aboutUs {
+      height: 100vh;
+      padding: var(--spacing-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .content-container {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin: 0 auto;
+    }
+
+    #aboutUs h2 {
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    #aboutUs p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: var(--spacing-sm) 0;
+      color: #333;
+    }
+
+    #aboutUs p strong {
+      font-weight: 600;
+    }
+
+    #aboutUs[style*="block"] .content-container {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Prevent Scrolling on Main Page */
     .no-scroll {
       overflow: hidden;
@@ -183,23 +231,6 @@
       max-width: 150px;
       margin-bottom: var(--spacing-lg);
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-    }
-
-    /* About Us Page */
-    #aboutUs {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: var(--spacing-lg);
-    }
-
-    #aboutUs p {
-      max-width: 600px;
-      margin: var(--spacing-sm) 0;
-      font-size: var(--font-size-base);
-      color: #333;
     }
 
     /* Responsive Design */
@@ -225,9 +256,9 @@
         padding: 0.6rem 1rem;
         font-size: 0.85rem;
       }
-      .form-container {
+      .form-container, .content-container {
         max-width: 100%;
-        padding: 0.6rem;
+        padding: 0.8rem;
         max-height: calc(100vh - 140px);
       }
       .main {
@@ -235,6 +266,9 @@
       }
       .form-group {
         max-width: 100%;
+      }
+      #aboutUs p {
+        font-size: 0.9rem;
       }
     }
   </style>
@@ -293,12 +327,14 @@
 
   <!-- About Us Page -->
   <div class="page" id="aboutUs">
-    <h2>About Us</h2>
-    <p><strong>Name:</strong> Mohd Shuaib</p>
-    <p><strong>Business:</strong> CSC Center & PNB Mini Branch</p>
-    <p><strong>Contact:</strong> 827344168</p>
-    <p><strong>About:</strong> I manage a CSC Center and PNB Mini Branch, offering reliable banking services, including account opening, money transfers, and customer support. Committed to providing efficient and trustworthy solutions to meet your financial needs.</p>
-    <button onclick="goBack()">Back to Home</button>
+    <div class="content-container">
+      <h2>About Us</h2>
+      <p><strong>Name:</strong> Mohd Shuaib</p>
+      <p><strong>Business:</strong> CSC Center & PNB Mini Branch</p>
+      <p><strong>Contact:</strong> 827344168</p>
+      <p><strong>About:</strong> I manage a CSC Center and PNB Mini Branch, offering reliable banking services, including account opening, money transfers, and customer support. Committed to providing efficient and trustworthy solutions to meet your financial needs.</p>
+      <button onclick="goBack()">Back to Home</button>
+    </div>
   </div>
 
   <script>
@@ -331,6 +367,10 @@
         document.body.classList.add("no-scroll");
         const formContainer = targetPage.querySelector(".form-container");
         console.log("Form container height:", formContainer.offsetHeight, "Viewport height:", window.innerHeight);
+      } else if (pageId === "aboutUs") {
+        document.body.classList.remove("no-scroll");
+        const contentContainer = targetPage.querySelector(".content-container");
+        console.log("About Us container height:", contentContainer.offsetHeight, "Viewport height:", window.innerHeight);
       } else {
         document.body.classList.remove("no-scroll");
       }
