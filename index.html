@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,4 +20,464 @@
     :root {
       --pnb-yellow: #FBBC09;
       --pnb-burgundy: #8B0029;
-      --spacing-sm: 0
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 2rem;
+      --font-size-lg: 2.4rem;
+      --font-size-md: 1.8rem;
+      --font-size-base: 1rem;
+    }
+
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
+      padding: var(--spacing-md);
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-md);
+      z-index: 1000;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar button {
+      background: var(--pnb-burgundy);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s;
+    }
+
+    .navbar button:hover {
+      background: linear-gradient(135deg, #A20E37, #6B001F);
+    }
+
+    /* Center Main Content */
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: var(--spacing-lg);
+      margin-top: 60px; /* Offset for navbar */
+    }
+
+    /* Hide Pages Initially */
+    .page {
+      display: none;
+      padding: var(--spacing-lg);
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .page[style*="block"] {
+      opacity: 1;
+    }
+
+    /* Add Customer Form */
+    #addCustomer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+      padding: var(--spacing-md);
+      text-align: center;
+    }
+
+    .form-container {
+      max-width: 600px;
+      width: 100%;
+      max-height: calc(100vh - 100px);
+      margin: 0 auto;
+      background: white;
+      padding: 0.8rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      overflow-y: auto;
+    }
+
+    .form-group {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto var(--spacing-sm);
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    #addCustomer h2 {
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: #333;
+    }
+
+    button {
+      padding: 0.6rem 1.2rem;
+      background: var(--pnb-burgundy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: var(--font-size-base);
+      margin: var(--spacing-sm);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #A20E37, #6B001F);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem;
+      margin: var(--spacing-sm) 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: var(--font-size-base);
+      line-height: 1.4;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--pnb-burgundy);
+      outline: none;
+    }
+
+    /* Error Message */
+    .error-message {
+      color: #D32F2F;
+      font-size: 0.9rem;
+      margin: var(--spacing-sm) 0;
+      display: none;
+      text-align: center;
+    }
+
+    /* About Us Page */
+    #aboutUs {
+      height: 100vh;
+      padding: var(--spacing-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .content-container {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin: 0 auto;
+    }
+
+    #aboutUs h2 {
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    #aboutUs p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin: var(--spacing-sm) 0;
+      color: #333;
+    }
+
+    #aboutUs p strong {
+      font-weight: 600;
+    }
+
+    #aboutUs[style*="block"] .content-container {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Prevent Scrolling on Main Page */
+    .no-scroll {
+      overflow: hidden;
+    }
+
+    /* Logo */
+    .logo {
+      max-width: 150px;
+      margin-bottom: var(--spacing-lg);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .form-group input {
+        font-size: 0.85rem;
+        padding: 0.4rem;
+      }
+      .form-group label {
+        font-size: 0.8rem;
+      }
+      button {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+      }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.6rem; }
+      .navbar {
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+      }
+      .navbar button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+      }
+      .form-container, .content-container {
+        max-width: 100%;
+        padding: 0.8rem;
+        max-height: calc(100vh - 140px);
+      }
+      .main {
+        margin-top: 100px;
+      }
+      .form-group {
+        max-width: 100%;
+      }
+      #aboutUs p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <button onclick="goBack()">Home</button>
+    <button onclick="showPage('addCustomer')">Add Customer</button>
+    <button onclick="showPage('aboutUs')">About Us</button>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main" id="mainSection">
+    <img src="assets/pnb-logo.png" alt="PNB Mini Branch Logo" class="logo" loading="lazy" onerror="this.src='https://via.placeholder.com/150x50?text=PNB+Logo'">
+    <h1>Welcome to PNB Mini Branch</h1>
+    <div class="form-group">
+      <label for="search">Search Customer</label>
+      <input type="text" id="search" placeholder="Enter Name, Mobile, Account, etc." aria-required="true">
+    </div>
+    <div class="error-message" id="searchError"></div>
+    <button onclick="searchCustomer()">Search</button>
+  </div>
+
+  <!-- Add Customer Page -->
+  <div class="page" id="addCustomer">
+    <div class="form-container">
+      <h2>Add New Customer</h2>
+      <form id="customerForm">
+        <div class="form-group">
+          <label for="name">Customer Name</label>
+          <input type="text" id="name" placeholder="Customer Name" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="mobile">Mobile Number</label>
+          <input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="accountNumber">Account Number</label>
+          <input type="text" id="accountNumber" placeholder="16-digit Account Number" pattern="[0-9]{16}" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="customerId">Customer ID</label>
+          <input type="text" id="customerId" placeholder="e.g., A12345678" pattern="[A-Z][0-9]{8}" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" placeholder="Address" aria-required="true">
+        </div>
+        <div class="error-message" id="formError"></div>
+        <button type="button" onclick="addCustomer()">Add Customer</button>
+        <button type="button" onclick="goBack()">Back to Home</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- About Us Page -->
+  <div class="page" id="aboutUs">
+    <div class="content-container">
+      <h2>About Us</h2>
+      <p><strong>Name:</strong> Mohd Shuaib</p>
+      <p><strong>Business:</strong> CSC Center & PNB Mini Branch</p>
+      <p><strong>Contact:</strong> 827344168</p>
+      <p><strong>About:</strong> I manage a CSC Center and PNB Mini Branch, offering reliable banking services, including account opening, money transfers, and customer support. Committed to providing efficient and trustworthy solutions to meet your financial needs.</p>
+      <button onclick="goBack()">Back to Home</button>
+    </div>
+  </div>
+
+  <script>
+    // Measure load time
+    const startTime = performance.now();
+
+    // Cached DOM Elements
+    const mainSection = document.getElementById("mainSection");
+    const searchError = document.getElementById("searchError");
+    const formError = document.getElementById("formError");
+    const customerForm = document.getElementById("customerForm");
+    const pages = document.querySelectorAll(".page");
+
+    // Input Sanitization
+    function sanitizeInput(input) {
+      const div = document.createElement("div");
+      div.textContent = input;
+      return div.innerHTML;
+    }
+
+    // Show Page Function
+    function showPage(pageId) {
+      console.log("Opening page:", pageId);
+      mainSection.style.display = "none";
+      pages.forEach(p => p.style.display = "none");
+      const targetPage = document.getElementById(pageId);
+      targetPage.style.display = "block";
+
+      if (pageId === "addCustomer") {
+        document.body.classList.add("no-scroll");
+        const formContainer = targetPage.querySelector(".form-container");
+        console.log("Form container height:", formContainer.offsetHeight, "Viewport height:", window.innerHeight);
+      } else if (pageId === "aboutUs") {
+        document.body.classList.remove("no-scroll");
+        const contentContainer = targetPage.querySelector(".content-container");
+        console.log("About Us container height:", contentContainer.offsetHeight, "Viewport height:", window.innerHeight);
+      } else {
+        document.body.classList.remove("no-scroll");
+      }
+    }
+
+    // Go Back Function
+    function goBack() {
+      mainSection.style.display = "flex";
+      pages.forEach(p => p.style.display = "none");
+      document.body.classList.remove("no-scroll");
+      searchError.style.display = "none";
+      formError.style.display = "none";
+    }
+
+    // Add Customer Function
+    function addCustomer() {
+      const name = sanitizeInput(document.getElementById("name").value.trim());
+      const mobile = document.getElementById("mobile").value.trim();
+      const accountNumber = document.getElementById("accountNumber").value.trim();
+      const customerId = document.getElementById("customerId").value.trim();
+      const address = sanitizeInput(document.getElementById("address").value.trim());
+
+      formError.style.display = "none";
+
+      // Validation
+      if (!name || !mobile || !accountNumber || !customerId || !address) {
+        formError.textContent = "Please fill in all fields!";
+        formError.style.display = "block";
+        console.log("Validation failed: Missing fields");
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        formError.textContent = "Please enter a valid 10-digit mobile number!";
+        formError.style.display = "block";
+        console.log("Validation failed: Invalid mobile");
+        return;
+      }
+      if (!/^[0-9]{16}$/.test(accountNumber)) {
+        formError.textContent = "Account number must be 16 digits!";
+        formError.style.display = "block";
+        console.log("Validation failed: Invalid account number");
+        return;
+      }
+      if (!/^[A-Z][0-9]{8}$/.test(customerId)) {
+        formError.textContent = "Customer ID must be 1 uppercase letter followed by 8 digits!";
+        formError.style.display = "block";
+        console.log("Validation failed: Invalid customer ID");
+        return;
+      }
+
+      // Placeholder for Google Sheets API integration
+      /*
+      fetch('https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Sheet1!A:E:append?valueInputOption=RAW', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          values: [[name, mobile, accountNumber, customerId, address]]
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        formError.textContent = "Customer added successfully!";
+        formError.style.color = "green";
+        formError.style.display = "block";
+        customerForm.reset();
+        setTimeout(goBack, 2000);
+      })
+      .catch(error => {
+        formError.textContent = "Error adding customer!";
+        formError.style.display = "block";
+      });
+      */
+
+      // Temporary success message
+      formError.textContent = "Customer added successfully!";
+      formError.style.color = "green";
+      formError.style.display = "block";
+      customerForm.reset();
+      setTimeout(goBack, 2000);
+    }
+
+    // Search Customer Function (Placeholder)
+    function searchCustomer() {
+      const query = sanitizeInput(document.getElementById("search").value.trim());
+      searchError.style.display = "none";
+
+      if (!query) {
+        searchError.textContent = "Please enter a search query!";
+        searchError.style.display = "block";
+        return;
+      }
+
+      // Placeholder for future search implementation
+      searchError.textContent = "Search functionality coming soon!";
+      searchError.style.color = "blue";
+      searchError.style.display = "block";
+    }
+
+    // Log load time
+    window.addEventListener('load', () => {
+      const loadTime = performance.now() - startTime;
+      console.log("Page load time:", loadTime, "ms");
+    });
+  </script>
+</body>
+</html>
