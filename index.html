@@ -101,6 +101,27 @@
     .menu-button:hover {
       background: #1b5e20;
     }
+
+    .form-container {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .form-container input {
+      margin-bottom: 10px;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .success-message {
+      color: green;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -111,6 +132,18 @@
   <div class="container">
     <div class="search-box">
       <input type="text" id="search" placeholder="Search by name..." onkeyup="searchCustomer()" />
+    </div>
+
+    <div class="form-container" id="addCustomerForm">
+      <h3>Add Customer</h3>
+      <input type="text" id="name" placeholder="Customer Name" />
+      <input type="text" id="phone" placeholder="Mobile Number (10 digits)" maxlength="10" />
+      <input type="text" id="accountNumber" placeholder="Account Number" />
+      <input type="text" id="customerId" placeholder="Customer ID" />
+      <input type="text" id="address" placeholder="Address" />
+      <button onclick="addCustomer()">Add</button>
+      <p id="errorMessage" class="error-message" style="display: none;"></p>
+      <p id="successMessage" class="success-message" style="display: none;"></p>
     </div>
 
     <table id="customerTable" style="margin-top: 2rem; width: 100%; display:none;">
@@ -131,7 +164,7 @@
   <!-- Side menu -->
   <div class="menu" id="sideMenu">
     <ul>
-      <li><a href="#">Add Customer</a></li>
+      <li><a href="#" onclick="showAddCustomerForm()">Add Customer</a></li>
       <li><a href="#">View All Customers</a></li>
       <li><a href="#">About Us</a></li>
     </ul>
@@ -170,10 +203,52 @@
       document.getElementById("customerTable").style.display = customers.length > 0 ? 'table' : 'none';
     }
 
+    // Function to show Add Customer form
+    function showAddCustomerForm() {
+      document.getElementById("addCustomerForm").style.display = "block";
+    }
+
     // Toggle the side menu visibility
     function toggleMenu() {
       const menu = document.getElementById("sideMenu");
       menu.classList.toggle("active");
+    }
+
+    // Add customer data
+    function addCustomer() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const accountNumber = document.getElementById("accountNumber").value.trim();
+      const customerId = document.getElementById("customerId").value.trim();
+      const address = document.getElementById("address").value.trim();
+
+      const errorMessage = document.getElementById("errorMessage");
+      const successMessage = document.getElementById("successMessage");
+
+      errorMessage.style.display = "none";
+      successMessage.style.display = "none";
+
+      // Validate mobile number
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phone)) {
+        errorMessage.innerHTML = "Please enter a valid 10-digit mobile number.";
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      // Add customer to the array (for now, later we'll link with Google Sheets)
+      customers.push({ name, phone, accountNumber, customerId, address });
+
+      // Clear the form
+      document.getElementById("name").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("accountNumber").value = "";
+      document.getElementById("customerId").value = "";
+      document.getElementById("address").value = "";
+
+      // Show success message
+      successMessage.innerHTML = "Customer added successfully!";
+      successMessage.style.display = "block";
     }
   </script>
 </body>
