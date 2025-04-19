@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="description" content="PNB Mini Branch offers banking services including account opening, money transfers, and customer support by Mohd Shuaib.">
+  <meta name="keywords" content="PNB Mini Branch, CSC Center, banking services, customer search, account management">
+  <meta name="author" content="Mohd Shuaib">
   <title>PNB Mini Branch</title>
-  <!-- Optimized Google Fonts: Import instead of preload for better performance -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body, html {
@@ -14,7 +17,6 @@
       font-family: 'Poppins', 'Arial', sans-serif;
       background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
       box-sizing: border-box;
-      /* Removed overflow: hidden to allow scrolling on mobile */
     }
 
     :root {
@@ -22,8 +24,8 @@
       --pnb-burgundy: #8B0029;
       --spacing-sm: 0.5rem;
       --spacing-md: 1rem;
-      --spacing-lg: 1.5rem; /* Reduced for mobile */
-      --font-size-lg: clamp(1.8rem, 5vw, 2.2rem); /* Responsive font size */
+      --spacing-lg: 1.5rem;
+      --font-size-lg: clamp(1.8rem, 5vw, 2.2rem);
       --font-size-md: clamp(1.4rem, 4vw, 1.6rem);
       --font-size-base: clamp(0.9rem, 3vw, 1rem);
     }
@@ -52,13 +54,13 @@
       background: var(--pnb-burgundy);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem; /* Reduced for mobile */
+      padding: 0.6rem 1.2rem;
       border-radius: 6px;
       font-size: var(--font-size-base);
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: background 0.3s;
-      min-width: 80px; /* Touch-friendly */
+      min-width: 80px;
     }
 
     .navbar button:hover {
@@ -74,7 +76,13 @@
       min-height: 100vh;
       text-align: center;
       padding: var(--spacing-md);
-      margin-top: 50px; /* Adjusted for navbar */
+      margin-top: 50px;
+      background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, var(--pnb-burgundy) 0%, var(--pnb-yellow) 100%);
+      color: white;
+    }
+
+    .main h1, .main label {
+      color: white;
     }
 
     /* Hide Pages Initially */
@@ -103,7 +111,7 @@
     }
 
     .form-container {
-      max-width: 90%; /* Better for mobile */
+      max-width: 90%;
       width: 100%;
       max-height: calc(100vh - 120px);
       margin: 0 auto;
@@ -116,7 +124,7 @@
 
     .form-group {
       width: 100%;
-      max-width: 400px; /* Smaller for mobile */
+      max-width: 400px;
       margin: 0 auto var(--spacing-sm);
     }
 
@@ -135,7 +143,7 @@
     }
 
     button {
-      padding: 0.5rem 1rem; /* Smaller for mobile */
+      padding: 0.5rem 1rem;
       background: var(--pnb-burgundy);
       color: white;
       border: none;
@@ -145,7 +153,7 @@
       margin: var(--spacing-sm);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: background 0.3s;
-      min-width: 100px; /* Touch-friendly */
+      min-width: 100px;
     }
 
     button:hover {
@@ -189,7 +197,7 @@
     }
 
     .content-container {
-      max-width: 90%; /* Better for mobile */
+      max-width: 90%;
       width: 100%;
       background: white;
       padding: var(--spacing-md);
@@ -225,6 +233,33 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Spinner for Loading */
+    .spinner {
+      display: none;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--pnb-burgundy);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: var(--spacing-sm) auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Footer */
+    footer {
+      background: var(--pnb-burgundy);
+      color: white;
+      text-align: center;
+      padding: var(--spacing-md);
+      font-size: var(--font-size-base);
+      margin-top: var(--spacing-md);
+    }
+
     /* Prevent Scrolling on Form Page Only */
     .no-scroll {
       overflow: hidden;
@@ -233,18 +268,18 @@
     /* Responsive Design */
     @media (max-width: 600px) {
       .navbar {
-        flex-direction: column; /* Stack buttons vertically */
+        flex-direction: column;
         align-items: center;
         padding: 0.5rem;
       }
       .navbar button {
-        width: 80%; /* Full-width buttons */
+        width: 80%;
         margin: 0.3rem 0;
         padding: 0.5rem;
         font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       }
       .main {
-        margin-top: 120px; /* More space for stacked navbar */
+        margin-top: 120px;
         padding: 0.5rem;
       }
       .form-container, .content-container {
@@ -275,11 +310,15 @@
       #aboutUs p {
         font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       }
+      footer {
+        font-size: clamp(0.75rem, 2vw, 0.85rem);
+        padding: 0.5rem;
+      }
     }
 
     @media (min-width: 601px) {
       .navbar {
-        flex-direction: row; /* Horizontal on larger screens */
+        flex-direction: row;
       }
       .navbar button {
         width: auto;
@@ -289,25 +328,26 @@
 </head>
 <body>
   <!-- Navigation Bar -->
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
     <button onclick="goBack()">Home</button>
     <button onclick="showPage('addCustomer')">Add Customer</button>
     <button onclick="showPage('aboutUs')">About Us</button>
   </nav>
 
   <!-- Main Content -->
-  <div class="main" id="mainSection">
+  <div class="main" id="mainSection" role="main" aria-label="Main content">
     <h1>Welcome to PNB Mini Branch</h1>
     <div class="form-group">
       <label for="search">Search Customer</label>
       <input type="text" id="search" placeholder="Enter Name, Mobile, Account, etc." aria-required="true">
     </div>
     <div class="error-message" id="searchError"></div>
+    <div class="spinner" id="searchSpinner"></div>
     <button onclick="searchCustomer()">Search</button>
   </div>
 
   <!-- Add Customer Page -->
-  <div class="page" id="addCustomer">
+  <div class="page" id="addCustomer" role="region" aria-label="Add customer form">
     <div class="form-container">
       <h2>Add New Customer</h2>
       <form id="customerForm">
@@ -332,6 +372,7 @@
           <input type="text" id="address" placeholder="Address" aria-required="true">
         </div>
         <div class="error-message" id="formError"></div>
+        <div class="spinner" id="formSpinner"></div>
         <button type="button" onclick="addCustomer()">Add Customer</button>
         <button type="button" onclick="goBack()">Back to Home</button>
       </form>
@@ -339,7 +380,7 @@
   </div>
 
   <!-- About Us Page -->
-  <div class="page" id="aboutUs">
+  <div class="page" id="aboutUs" role="region" aria-label="About us">
     <div class="content-container">
       <h2>About Us</h2>
       <p><strong>Name:</strong> Mohd Shuaib</p>
@@ -350,6 +391,12 @@
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer>
+    <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: example@example.com</p>
+    <p>© 2025 PNB Mini Branch. All rights reserved.</p>
+  </footer>
+
   <script>
     // Measure load time
     const startTime = performance.now();
@@ -357,7 +404,9 @@
     // Cached DOM Elements
     const mainSection = document.getElementById("mainSection");
     const searchError = document.getElementById("searchError");
+    const searchSpinner = document.getElementById("searchSpinner");
     const formError = document.getElementById("formError");
+    const formSpinner = document.getElementById("formSpinner");
     const customerForm = document.getElementById("customerForm");
     const pages = document.querySelectorAll(".page");
 
@@ -396,45 +445,57 @@
       document.body.classList.remove("no-scroll");
       searchError.style.display = "none";
       formError.style.display = "none";
+      searchSpinner.style.display = "none";
+      formSpinner.style.display = "none";
     }
 
     // Add Customer Function
     function addCustomer() {
+      formSpinner.style.display = "block";
+      formError.style.display = "none";
+
       const name = sanitizeInput(document.getElementById("name").value.trim());
       const mobile = document.getElementById("mobile").value.trim();
       const accountNumber = document.getElementById("accountNumber").value.trim();
       const customerId = document.getElementById("customerId").value.trim();
       const address = sanitizeInput(document.getElementById("address").value.trim());
 
-      formError.style.display = "none";
-
       // Validation
       if (!name || !mobile || !accountNumber || !customerId || !address) {
         formError.textContent = "Please fill in all fields!";
         formError.style.display = "block";
+        formSpinner.style.display = "none";
         console.log("Validation failed: Missing fields");
         return;
       }
       if (!/^[0-9]{10}$/.test(mobile)) {
         formError.textContent = "Please enter a valid 10-digit mobile number!";
         formError.style.display = "block";
+        formSpinner.style.display = "none";
         console.log("Validation failed: Invalid mobile");
         return;
       }
       if (!/^[0-9]{16}$/.test(accountNumber)) {
         formError.textContent = "Account number must be 16 digits!";
         formError.style.display = "block";
+        formSpinner.style.display = "none";
         console.log("Validation failed: Invalid account number");
         return;
       }
       if (!/^[A-Z][0-9]{8}$/.test(customerId)) {
         formError.textContent = "Customer ID must be 1 uppercase letter followed by 8 digits!";
         formError.style.display = "block";
+        formSpinner.style.display = "none";
         console.log("Validation failed: Invalid customer ID");
         return;
       }
 
-      // Placeholder for Google Sheets API integration
+      // Save to localStorage (temporary, until Google API)
+      let customers = JSON.parse(localStorage.getItem("customers") || "[]");
+      customers.push({ name, mobile, accountNumber, customerId, address });
+      localStorage.setItem("customers", JSON.stringify(customers));
+
+      // Placeholder for Google Sheets API (to be added tomorrow)
       /*
       fetch('https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Sheet1!A:E:append?valueInputOption=RAW', {
         method: 'POST',
@@ -452,37 +513,61 @@
         formError.style.color = "green";
         formError.style.display = "block";
         customerForm.reset();
+        formSpinner.style.display = "none";
         setTimeout(goBack, 2000);
       })
       .catch(error => {
         formError.textContent = "Error adding customer!";
         formError.style.display = "block";
+        formSpinner.style.display = "none";
       });
       */
 
       // Temporary success message
-      formError.textContent = "Customer added successfully!";
-      formError.style.color = "green";
-      formError.style.display = "block";
-      customerForm.reset();
-      setTimeout(goBack, 2000);
+      setTimeout(() => {
+        formError.textContent = "Customer added successfully!";
+        formError.style.color = "green";
+        formError.style.display = "block";
+        customerForm.reset();
+        formSpinner.style.display = "none";
+        setTimeout(goBack, 2000);
+      }, 1000);
     }
 
-    // Search Customer Function (Placeholder)
+    // Search Customer Function
     function searchCustomer() {
-      const query = sanitizeInput(document.getElementById("search").value.trim());
+      searchSpinner.style.display = "block";
       searchError.style.display = "none";
+
+      const query = sanitizeInput(document.getElementById("search").value.trim().toLowerCase());
 
       if (!query) {
         searchError.textContent = "Please enter a search query!";
         searchError.style.display = "block";
+        searchSpinner.style.display = "none";
         return;
       }
 
-      // Placeholder for future search implementation
-      searchError.textContent = "Search functionality coming soon!";
-      searchError.style.color = "blue";
-      searchError.style.display = "block";
+      // Temporary localStorage search (until Google API)
+      let customers = JSON.parse(localStorage.getItem("customers") || "[]");
+      let results = customers.filter(c =>
+        c.name.toLowerCase().includes(query) ||
+        c.mobile.includes(query) ||
+        c.accountNumber.includes(query) ||
+        c.customerId.toLowerCase().includes(query)
+      );
+
+      setTimeout(() => {
+        if (results.length > 0) {
+          searchError.textContent = `Found ${results.length} customer(s): ${results.map(c => c.name).join(", ")}`;
+          searchError.style.color = "green";
+        } else {
+          searchError.textContent = "No customers found!";
+          searchError.style.color = "red";
+        }
+        searchError.style.display = "block";
+        searchSpinner.style.display = "none";
+      }, 1000);
     }
 
     // Log load time
