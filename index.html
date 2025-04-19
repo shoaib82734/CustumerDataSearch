@@ -10,6 +10,7 @@
       background-color: #f4f6f8;
       margin: 0;
       padding: 0;
+      display: flex;
     }
     header {
       background-color: #2e7d32;
@@ -17,6 +18,7 @@
       padding: 1rem;
       text-align: center;
       font-size: 1.5rem;
+      width: 100%;
     }
     .container {
       max-width: 800px;
@@ -43,37 +45,62 @@
     button:hover {
       background-color: #1b5e20;
     }
-    table {
-      width: 100%;
-      margin-top: 1rem;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 0.75rem;
-      text-align: left;
-    }
-    th {
-      background-color: #f1f1f1;
-    }
     .search-box {
       margin-top: 1rem;
+    }
+    /* Side menu styling */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 50px;
+      background-color: #2e7d32;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 1000;
+    }
+    .side-menu .dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: white;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+    .side-menu .options {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      left: 50px;
+      background-color: #2e7d32;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .side-menu .options a {
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      width: 100px;
+      text-align: center;
+    }
+    .side-menu .options a:hover {
+      background-color: #1b5e20;
     }
   </style>
 </head>
 <body>
+
   <header>
     Customer Data Manager
   </header>
 
   <div class="container">
-    <h2>Add New Customer</h2>
-    <input type="text" id="name" placeholder="Customer Name" />
-    <input type="text" id="phone" placeholder="Phone Number" />
-    <input type="email" id="email" placeholder="Email Address" />
-    <input type="text" id="address" placeholder="Address" />
-    <button onclick="addCustomer()">Add Customer</button>
-
     <div class="search-box">
       <h3>Search Customer</h3>
       <input type="text" id="search" placeholder="Search by name..." onkeyup="searchCustomer()" />
@@ -94,33 +121,30 @@
     </table>
   </div>
 
+  <!-- Side Menu -->
+  <div class="side-menu">
+    <div class="dot" onclick="toggleOptions()"></div>
+    <div class="options" id="options">
+      <a href="#" onclick="showAddCustomer()">Add Customer</a>
+      <a href="#" onclick="viewAllCustomers()">View All Customers</a>
+      <a href="#" onclick="showAboutUs()">About Us</a>
+    </div>
+  </div>
+
   <script>
     const customers = [];
 
-    function addCustomer() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const address = document.getElementById("address").value.trim();
-
-      if (!name || !phone || !email || !address) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      customers.push({ name, phone, email, address });
-      displayCustomers(customers);
-
-      document.getElementById("name").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("address").value = "";
+    function searchCustomer() {
+      const query = document.getElementById("search").value.toLowerCase();
+      const filtered = customers.filter(c =>
+        c.name.toLowerCase().includes(query)
+      );
+      displayCustomers(filtered);
     }
 
     function displayCustomers(data) {
       const tableBody = document.getElementById("customerTable").querySelector("tbody");
       tableBody.innerHTML = "";
-
       data.forEach((cust) => {
         const row = `<tr>
             <td>${cust.name}</td>
@@ -132,14 +156,26 @@
       });
     }
 
-    function searchCustomer() {
-      const query = document.getElementById("search").value.toLowerCase();
-      const filtered = customers.filter(c =>
-        c.name.toLowerCase().includes(query)
-      );
-      displayCustomers(filtered);
+    function toggleOptions() {
+      const options = document.getElementById("options");
+      options.style.display = options.style.display === "none" || options.style.display === "" ? "flex" : "none";
+    }
+
+    function showAddCustomer() {
+      alert("Add Customer option clicked!");
+      // You can redirect to a new page or show a modal for adding customers here.
+    }
+
+    function viewAllCustomers() {
+      alert("View All Customers option clicked!");
+      // You can add functionality to view all customers here.
+    }
+
+    function showAboutUs() {
+      alert("About Us option clicked!");
+      // You can show an about us section or redirect to a page.
     }
   </script>
+
 </body>
 </html>
-
