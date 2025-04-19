@@ -3,106 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PNB Mini Branch - Customer Data Manager</title>
+  <title>PNB Mini Branch</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f1f1f1;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f8f8f8;
     }
 
     header {
-      background-color: #e60012; /* PNB red */
+      background-color: #e60012;
       color: white;
       padding: 1rem;
       text-align: center;
-      font-size: 1.5rem;
-      width: 100%;
+      font-size: 1.8rem;
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 1000;
+      right: 0;
+      z-index: 10;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
-    .container {
-      max-width: 800px;
-      margin-top: 4rem;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      width: 100%;
-    }
-
-    .search-box {
-      display: flex;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-
-    input {
-      padding: 0.6rem;
-      margin: 0.3rem 0;
-      width: 80%;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-
-    .form-container {
-      display: none;
-      margin-top: 20px;
-    }
-
-    .form-container input {
-      margin-bottom: 10px;
-    }
-
-    button {
-      background-color: #e60012; /* PNB red */
+    .menu-button {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      background: #e60012;
       color: white;
-      padding: 0.8rem;
+      padding: 0.5rem 0.8rem;
       border-radius: 5px;
       cursor: pointer;
-      border: none;
-    }
-
-    button:hover {
-      background-color: #c3000f;
-    }
-
-    .error-message {
-      color: red;
-      font-size: 0.9rem;
-      margin-top: 10px;
-    }
-
-    .success-message {
-      color: green;
-      font-size: 1rem;
-      margin-top: 10px;
+      z-index: 11;
+      font-size: 1.2rem;
     }
 
     .menu {
       position: fixed;
-      top: 60px;
-      left: 10px;
+      top: 3.5rem;
+      left: 1rem;
       background: #e60012;
       color: white;
       border-radius: 5px;
       padding: 1rem;
-      cursor: pointer;
       display: none;
       flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .menu.active {
-      display: flex;
+      z-index: 11;
     }
 
     .menu ul {
@@ -119,157 +66,182 @@
       text-decoration: none;
       color: white;
       font-size: 1rem;
-    }
-
-    .menu-button {
-      position: fixed;
-      top: 60px;
-      left: 10px;
-      background: #e60012;
-      color: white;
-      padding: 0.5rem;
-      border-radius: 50%;
       cursor: pointer;
     }
 
-    .menu-button:hover {
-      background: #c3000f;
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding-top: 4rem;
+    }
+
+    .search-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .search-box input {
+      padding: 1rem;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1.1rem;
+    }
+
+    #addCustomerSection,
+    #aboutUsSection {
+      display: none;
+      padding: 2rem;
+      max-width: 600px;
+      margin: 6rem auto 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #addCustomerSection h2 {
+      color: #e60012;
+      margin-bottom: 1rem;
+    }
+
+    #addCustomerSection input,
+    #addCustomerSection button {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #addCustomerSection button {
+      background-color: #e60012;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #addCustomerSection button:hover {
+      background-color: #c3000f;
+    }
+
+    #aboutUsSection h2 {
+      color: #e60012;
+      margin-bottom: 1rem;
+    }
+
+    #successMsg {
+      color: green;
+      margin-bottom: 1rem;
+    }
+
+    .back-btn {
+      background: #555;
+      color: white;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: #333;
     }
   </style>
 </head>
 <body>
-  <header>
-    PNB Mini Branch - Customer Data Manager
-  </header>
 
-  <div class="container" id="mainContainer">
-    <div class="search-box" id="searchBox">
-      <input type="text" id="search" placeholder="Search by name..." onkeyup="searchCustomer()" />
-    </div>
+  <header>PNB Mini Branch - CSC Center</header>
 
-    <div class="form-container" id="addCustomerForm">
-      <h3>Add Customer</h3>
-      <input type="text" id="name" placeholder="Customer Name" />
-      <input type="text" id="phone" placeholder="Mobile Number (10 digits)" maxlength="10" />
-      <input type="text" id="accountNumber" placeholder="Account Number" />
-      <input type="text" id="customerId" placeholder="Customer ID" />
-      <input type="text" id="address" placeholder="Address" />
-      <button onclick="addCustomer()">Add</button>
-      <button onclick="backToHome()">Back to Home</button>
-      <p id="errorMessage" class="error-message" style="display: none;"></p>
-      <p id="successMessage" class="success-message" style="display: none;"></p>
-    </div>
-
-    <table id="customerTable" style="margin-top: 2rem; width: 100%; display:none;">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th>Address</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Customer rows will appear here -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Side menu -->
-  <div class="menu" id="sideMenu">
+  <div class="menu-button" onclick="toggleMenu()">☰</div>
+  <div class="menu" id="menu">
     <ul>
-      <li><a href="#" onclick="showAddCustomerForm()">Add Customer</a></li>
-      <li><a href="#">View All Customers</a></li>
-      <li><a href="#">About Us</a></li>
+      <li><a onclick="showAddCustomer()">Add Customer</a></li>
+      <li><a onclick="showAboutUs()">About Us</a></li>
+      <li><a onclick="goHome()">Back to Home</a></li>
     </ul>
   </div>
 
-  <!-- Menu button -->
-  <div class="menu-button" onclick="toggleMenu()">&#x22EE;</div>
+  <div class="container" id="mainContainer">
+    <div class="search-box" id="searchBox">
+      <input type="text" id="search" placeholder="Search customer by name or mobile..." />
+    </div>
+  </div>
+
+  <div id="addCustomerSection">
+    <h2>Add Customer</h2>
+    <div id="successMsg"></div>
+    <input type="text" id="name" placeholder="Customer Name" />
+    <input type="text" id="mobile" placeholder="Mobile Number" maxlength="10" oninput="validateMobile(this)" />
+    <input type="text" id="accountNumber" placeholder="Account Number" />
+    <input type="text" id="customerId" placeholder="Customer ID" />
+    <input type="text" id="address" placeholder="Address" />
+    <button onclick="submitCustomer()">Add</button>
+    <button class="back-btn" onclick="goHome()">Back to Home</button>
+  </div>
+
+  <div id="aboutUsSection">
+    <h2>About Us</h2>
+    <p><strong>Mohd Shuaib</strong> – A proud operator of a certified <strong>CSC (Common Service Center)</strong> and an official <strong>PNB Mini Branch</strong> representative.</p>
+    <p>We are committed to providing seamless banking and digital services to the local community with trust, transparency, and efficiency. From opening new accounts to offering digital solutions under the CSC platform, our aim is to make banking accessible for everyone.</p>
+    <p>Whether you need help with government services, banking solutions, or customer support — our center is your one-stop destination.</p>
+    <p>📞 <strong>Contact:</strong> <a href="tel:827344168">827344168</a><br>
+    🏢 <strong>Operated by:</strong> Mohd Shuaib<br>
+    🏦 <strong>Service Point:</strong> PNB Mini Branch & CSC Center</p>
+    <button class="back-btn" onclick="goHome()">Back to Home</button>
+  </div>
 
   <script>
-    let customers = [];
-
-    // Function to search customers
-    function searchCustomer() {
-      const query = document.getElementById("search").value;
-      google.script.run.withSuccessHandler(displayCustomers).searchCustomers(query);
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.classList.toggle("active");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
 
-    // Function to display customer data from Google Sheets
-    function displayCustomers(customers) {
-      const tableBody = document.getElementById("customerTable").querySelector("tbody");
-      tableBody.innerHTML = "";
-      customers.forEach((customer) => {
-        const row = `<tr>
-            <td>${customer[0]}</td>
-            <td>${customer[1]}</td>
-            <td>${customer[2]}</td>
-            <td>${customer[3]}</td>
-          </tr>`;
-        tableBody.innerHTML += row;
-      });
-
-      // Show the table if data is available
-      document.getElementById("customerTable").style.display = customers.length > 0 ? 'table' : 'none';
+    function showAddCustomer() {
+      document.getElementById("mainContainer").style.display = "none";
+      document.getElementById("addCustomerSection").style.display = "block";
+      document.getElementById("aboutUsSection").style.display = "none";
+      document.getElementById("successMsg").innerText = "";
     }
 
-    // Function to show Add Customer form and hide Search Box
-    function showAddCustomerForm() {
+    function showAboutUs() {
+      document.getElementById("mainContainer").style.display = "none";
+      document.getElementById("addCustomerSection").style.display = "none";
+      document.getElementById("aboutUsSection").style.display = "block";
+    }
+
+    function goHome() {
       document.getElementById("mainContainer").style.display = "flex";
-      document.getElementById("searchBox").style.display = "none";
-      document.getElementById("addCustomerForm").style.display = "block";
+      document.getElementById("addCustomerSection").style.display = "none";
+      document.getElementById("aboutUsSection").style.display = "none";
     }
 
-    // Function to go back to home (Search page)
-    function backToHome() {
-      document.getElementById("searchBox").style.display = "block";
-      document.getElementById("addCustomerForm").style.display = "none";
-      document.getElementById("mainContainer").style.display = "flex";
+    function validateMobile(input) {
+      const value = input.value;
+      if (!/^\d*$/.test(value)) {
+        alert("Mobile number must contain only digits.");
+        input.value = value.replace(/\D/g, '');
+      }
     }
 
-    // Add customer data
-    function addCustomer() {
+    function submitCustomer() {
       const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
       const accountNumber = document.getElementById("accountNumber").value.trim();
       const customerId = document.getElementById("customerId").value.trim();
       const address = document.getElementById("address").value.trim();
 
-      const errorMessage = document.getElementById("errorMessage");
-      const successMessage = document.getElementById("successMessage");
-
-      errorMessage.style.display = "none";
-      successMessage.style.display = "none";
-
-      // Validate mobile number
-      const phoneRegex = /^[0-9]{10}$/;
-      if (!phoneRegex.test(phone)) {
-        errorMessage.innerHTML = "Please enter a valid 10-digit mobile number.";
-        errorMessage.style.display = "block";
+      if (!name || !mobile || !accountNumber || !customerId || !address) {
+        alert("Please fill in all fields.");
         return;
       }
 
-      // Add customer to the array (for now, later we'll link with Google Sheets)
-      customers.push({ name, phone, accountNumber, customerId, address });
-
-      // Clear the form
-      document.getElementById("name").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("accountNumber").value = "";
-      document.getElementById("customerId").value = "";
-      document.getElementById("address").value = "";
-
-      // Show success message
-      successMessage.innerHTML = "Customer added successfully!";
-      successMessage.style.display = "block";
-    }
-
-    // Toggle the side menu visibility
-    function toggleMenu() {
-      const menu = document.getElementById("sideMenu");
-      menu.classList.toggle("active");
-    }
-  </script>
-</body>
-</html>
+      if (mobile.length !== 10) {
+        alert("Mobile number must be 10 digits
