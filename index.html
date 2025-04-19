@@ -125,6 +125,49 @@
       color: white;
       border-radius: 50%;
     }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      .main h1 {
+        font-size: 1.5rem;
+      }
+
+      .menu button {
+        font-size: 0.9rem;
+        width: 100%;
+      }
+
+      .menu-trigger {
+        font-size: 1.2rem;
+      }
+
+      .form-group input {
+        font-size: 1rem;
+      }
+    }
+
+    /* Focus styles for inputs */
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--pnb-burgundy);
+    }
+
+    .form-group input {
+      padding: 0.8rem;
+      font-size: 1rem;
+    }
+
+    button:focus {
+      outline: none;
+      box-shadow: 0 0 3px 2px var(--pnb-yellow);
+    }
+
+    /* Error message styling */
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 0.2rem;
+    }
   </style>
 </head>
 <body>
@@ -151,22 +194,27 @@
     <div class="form-group">
       <label for="name">Customer Name</label>
       <input type="text" id="name" placeholder="Customer Name">
+      <div class="error-message" id="nameError"></div>
     </div>
     <div class="form-group">
       <label for="mobile">Mobile Number</label>
       <input type="text" id="mobile" placeholder="Mobile Number">
+      <div class="error-message" id="mobileError"></div>
     </div>
     <div class="form-group">
       <label for="accountNumber">Account Number</label>
       <input type="text" id="accountNumber" placeholder="Account Number">
+      <div class="error-message" id="accountNumberError"></div>
     </div>
     <div class="form-group">
       <label for="customerId">Customer ID</label>
       <input type="text" id="customerId" placeholder="Customer ID">
+      <div class="error-message" id="customerIdError"></div>
     </div>
     <div class="form-group">
       <label for="address">Address</label>
       <input type="text" id="address" placeholder="Address">
+      <div class="error-message" id="addressError"></div>
     </div>
     <button onclick="addCustomer()">Add Customer</button>
     <button onclick="goBack()">Back to Home</button>
@@ -204,7 +252,7 @@
       document.body.classList.remove("no-scroll");
     }
 
-    // Add Customer Function
+    // Add Customer Function with Validation
     function addCustomer() {
       const name = document.getElementById("name").value;
       const mobile = document.getElementById("mobile").value;
@@ -212,19 +260,47 @@
       const customerId = document.getElementById("customerId").value;
       const address = document.getElementById("address").value;
 
-      if (!name || !mobile || !accountNumber || !customerId || !address) {
-        alert("Please fill in all fields!");
-        return;
+      // Clear previous error messages
+      clearErrors();
+
+      let valid = true;
+
+      if (!name) {
+        showError("nameError", "Please enter the customer name.");
+        valid = false;
+      }
+      if (!mobile || mobile.length !== 10 || isNaN(mobile)) {
+        showError("mobileError", "Please enter a valid 10-digit mobile number.");
+        valid = false;
+      }
+      if (!accountNumber) {
+        showError("accountNumberError", "Please enter the account number.");
+        valid = false;
+      }
+      if (!customerId) {
+        showError("customerIdError", "Please enter the customer ID.");
+        valid = false;
+      }
+      if (!address) {
+        showError("addressError", "Please enter the address.");
+        valid = false;
       }
 
-      if (mobile.length !== 10 || isNaN(mobile)) {
-        alert("Please enter a valid mobile number!");
-        return;
+      if (valid) {
+        // Save customer data (can be linked to Google Sheets here)
+        alert("Customer added successfully!");
+        goBack();
       }
+    }
 
-      // Save customer data (can be linked to Google Sheets here)
-      alert("Customer added successfully!");
-      goBack();
+    // Function to show error messages
+    function showError(elementId, message) {
+      document.getElementById(elementId).textContent = message;
+    }
+
+    // Function to clear error messages
+    function clearErrors() {
+      document.querySelectorAll(".error-message").forEach(e => e.textContent = "");
     }
 
     // Toggle Menu Visibility
@@ -232,6 +308,16 @@
       const menu = document.getElementById("menuDropdown");
       menu.style.display = menu.style.display === "none" ? "flex" : "none";
     }
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function(event) {
+      const menu = document.getElementById("menuDropdown");
+      const menuTrigger = document.querySelector(".menu-trigger");
+
+      if (!menu.contains(event.target) && !menuTrigger.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>
