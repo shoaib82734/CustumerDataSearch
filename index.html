@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Data Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 0.6rem;
+      margin: 0.3rem 0;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #2e7d32;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background-color: #1b5e20;
+    }
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.75rem;
+      text-align: left;
+    }
+    th {
+      background-color: #f1f1f1;
+    }
+    .search-box {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Customer Data Manager
+  </header>
+
+  <div class="container">
+    <h2>Add New Customer</h2>
+    <input type="text" id="name" placeholder="Customer Name" />
+    <input type="text" id="phone" placeholder="Phone Number" />
+    <input type="email" id="email" placeholder="Email Address" />
+    <input type="text" id="address" placeholder="Address" />
+    <button onclick="addCustomer()">Add Customer</button>
+
+    <div class="search-box">
+      <h3>Search Customer</h3>
+      <input type="text" id="search" placeholder="Search by name..." onkeyup="searchCustomer()" />
+    </div>
+
+    <table id="customerTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Customer rows will appear here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const customers = [];
+
+    function addCustomer() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
+
+      if (!name || !phone || !email || !address) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      customers.push({ name, phone, email, address });
+      displayCustomers(customers);
+
+      document.getElementById("name").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("address").value = "";
+    }
+
+    function displayCustomers(data) {
+      const tableBody = document.getElementById("customerTable").querySelector("tbody");
+      tableBody.innerHTML = "";
+
+      data.forEach((cust) => {
+        const row = `<tr>
+            <td>${cust.name}</td>
+            <td>${cust.phone}</td>
+            <td>${cust.email}</td>
+            <td>${cust.address}</td>
+          </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    function searchCustomer() {
+      const query = document.getElementById("search").value.toLowerCase();
+      const filtered = customers.filter(c =>
+        c.name.toLowerCase().includes(query)
+      );
+      displayCustomers(filtered);
+    }
+  </script>
+</body>
+</html>
 
