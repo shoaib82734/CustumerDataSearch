@@ -147,6 +147,29 @@
     .active {
       display: block !important;
     }
+
+    /* Add Customer Form Center Alignment */
+    #addCustomer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 70px); /* Full screen height minus header */
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+
+    #addCustomer .form-group {
+      width: 100%;
+      max-width: 500px; /* Set max-width for form to make it look more organized */
+      margin-bottom: 1rem;
+    }
+
+    #addCustomer h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
   </style>
 </head>
 <body>
