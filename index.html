@@ -18,8 +18,8 @@
       --pnb-yellow: #FBBC09;
       --pnb-burgundy: #A20E37;
       --menu-bg-color: #333;
-      --menu-button-hover: #555;
       --menu-text-color: white;
+      --menu-button-hover: #555;
     }
 
     /* Center Main Content */
@@ -99,12 +99,13 @@
     .menu {
       position: absolute;
       top: 20px;
-      right: 20px;
+      left: 20px;
       background-color: var(--menu-bg-color);
       border-radius: 5px;
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
       display: none;
       flex-direction: column;
+      z-index: 100;
     }
 
     .menu button {
@@ -113,8 +114,8 @@
       border: none;
       background: none;
       font-size: 1rem;
-      color: var(--menu-text-color);
       width: 200px;
+      color: var(--menu-text-color);
     }
 
     .menu button:hover {
@@ -128,49 +129,20 @@
       background-color: var(--pnb-burgundy);
       color: white;
       border-radius: 50%;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 101;
     }
 
-    /* Mobile Responsiveness */
-    @media (max-width: 600px) {
-      .main h1 {
-        font-size: 1.5rem;
-      }
-
-      .menu button {
-        font-size: 0.9rem;
-        width: 100%;
-      }
-
-      .menu-trigger {
-        font-size: 1.2rem;
-      }
-
-      .form-group input {
-        font-size: 1rem;
-      }
-    }
-
-    /* Focus styles for inputs */
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--pnb-burgundy);
-    }
-
-    .form-group input {
+    .search-bar {
+      width: 100%;
+      max-width: 500px;
       padding: 0.8rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
       font-size: 1rem;
-    }
-
-    button:focus {
-      outline: none;
-      box-shadow: 0 0 3px 2px var(--pnb-yellow);
-    }
-
-    /* Error message styling */
-    .error-message {
-      color: red;
-      font-size: 0.9rem;
-      margin-top: 0.2rem;
     }
   </style>
 </head>
@@ -182,16 +154,16 @@
   <div class="menu" id="menuDropdown">
     <button onclick="showPage('addCustomer')">Add Customer</button>
     <button onclick="showPage('aboutUs')">About Us</button>
+    <button onclick="goBack()">Back to Home</button>
   </div>
 
   <!-- Main Content -->
   <div class="main" id="mainSection">
     <h1>Welcome to PNB Mini Branch</h1>
-
-    <!-- Search Bar -->
-    <div class="form-group">
-      <input type="text" id="searchBar" placeholder="Search for a customer" oninput="searchCustomer()">
-    </div>
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search by Name, Mobile, Account Number, Customer ID, Address">
+    <button onclick="searchCustomer()">Search</button>
+    <button onclick="showPage('addCustomer')">Add Customer</button>
+    <button onclick="showPage('aboutUs')">About Us</button>
   </div>
 
   <!-- Add Customer Page -->
@@ -200,27 +172,22 @@
     <div class="form-group">
       <label for="name">Customer Name</label>
       <input type="text" id="name" placeholder="Customer Name">
-      <div class="error-message" id="nameError"></div>
     </div>
     <div class="form-group">
       <label for="mobile">Mobile Number</label>
       <input type="text" id="mobile" placeholder="Mobile Number">
-      <div class="error-message" id="mobileError"></div>
     </div>
     <div class="form-group">
       <label for="accountNumber">Account Number</label>
       <input type="text" id="accountNumber" placeholder="Account Number">
-      <div class="error-message" id="accountNumberError"></div>
     </div>
     <div class="form-group">
       <label for="customerId">Customer ID</label>
       <input type="text" id="customerId" placeholder="Customer ID">
-      <div class="error-message" id="customerIdError"></div>
     </div>
     <div class="form-group">
       <label for="address">Address</label>
       <input type="text" id="address" placeholder="Address">
-      <div class="error-message" id="addressError"></div>
     </div>
     <button onclick="addCustomer()">Add Customer</button>
     <button onclick="goBack()">Back to Home</button>
@@ -237,6 +204,8 @@
   </div>
 
   <script>
+    let customers = []; // This array will store customer data temporarily for search
+
     // Show Page Function
     function showPage(pageId) {
       document.getElementById("mainSection").style.display = "none";
@@ -258,7 +227,7 @@
       document.body.classList.remove("no-scroll");
     }
 
-    // Add Customer Function with Validation
+    // Add Customer Function
     function addCustomer() {
       const name = document.getElementById("name").value;
       const mobile = document.getElementById("mobile").value;
@@ -266,54 +235,45 @@
       const customerId = document.getElementById("customerId").value;
       const address = document.getElementById("address").value;
 
-      // Clear previous error messages
-      clearErrors();
-
-      let valid = true;
-
-      if (!name) {
-        showError("nameError", "Name is required.");
-        valid = false;
+      if (!name || !mobile || !accountNumber || !customerId || !address) {
+        alert("Please fill in all fields!");
+        return;
       }
 
-      if (!mobile || !/^\d{10}$/.test(mobile)) {
-        showError("mobileError", "Please enter a valid 10-digit mobile number.");
-        valid = false;
+      if (mobile.length !== 10 || isNaN(mobile)) {
+        alert("Please enter a valid mobile number!");
+        return;
       }
 
-      if (!accountNumber) {
-        showError("accountNumberError", "Account number is required.");
-        valid = false;
-      }
+      // Save customer data to the array (can be replaced with Google Sheets integration later)
+      customers.push({ name, mobile, accountNumber, customerId, address });
+      alert("Customer added successfully!");
+      goBack();
+    }
 
-      if (!customerId) {
-        showError("customerIdError", "Customer ID is required.");
-        valid = false;
-      }
+    // Search Function
+    function searchCustomer() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const result = customers.filter(customer => {
+        return customer.name.toLowerCase().includes(query) || 
+               customer.mobile.includes(query) || 
+               customer.accountNumber.includes(query) ||
+               customer.customerId.includes(query) ||
+               customer.address.toLowerCase().includes(query);
+      });
 
-      if (!address) {
-        showError("addressError", "Address is required.");
-        valid = false;
-      }
-
-      if (valid) {
-        alert("Customer added successfully!");
-        goBack();
+      if (result.length > 0) {
+        alert(`Found ${result.length} customer(s) matching the search query.`);
+        console.log(result); // You can display these results dynamically as needed
+      } else {
+        alert("No customer found matching the search query.");
       }
     }
 
-    function showError(field, message) {
-      document.getElementById(field).innerText = message;
-    }
-
-    function clearErrors() {
-      document.querySelectorAll(".error-message").forEach(e => e.innerText = "");
-    }
-
-    // Toggle Menu
+    // Toggle Menu Visibility
     function toggleMenu() {
       const menu = document.getElementById("menuDropdown");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+      menu.style.display = menu.style.display === "none" ? "flex" : "none";
     }
   </script>
 </body>
