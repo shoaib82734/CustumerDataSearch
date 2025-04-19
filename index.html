@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PNB Mini Branch</title>
   <style>
-    /* Global Styles */
     body, html {
       margin: 0;
       padding: 0;
@@ -73,13 +72,13 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 1rem;
+      margin: 0.5rem;
     }
 
     button:hover {
       background-color: #870b2d;
     }
 
-    /* Center Alignment of Add Customer Form */
     .form-group input {
       width: 100%;
       padding: 0.8rem;
@@ -92,9 +91,53 @@
     .no-scroll {
       overflow: hidden;
     }
+
+    /* Three-Dot Menu */
+    .menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+    }
+
+    .menu button {
+      padding: 0.7rem;
+      text-align: left;
+      border: none;
+      background: none;
+      font-size: 1rem;
+      width: 200px;
+    }
+
+    .menu button:hover {
+      background-color: #f1f1f1;
+    }
+
+    .menu-trigger {
+      cursor: pointer;
+      padding: 0.7rem;
+      font-size: 1.5rem;
+      background-color: var(--pnb-burgundy);
+      color: white;
+      border-radius: 50%;
+    }
   </style>
 </head>
 <body>
+  <!-- Three-Dot Menu Trigger -->
+  <div class="menu-trigger" onclick="toggleMenu()">&#x22EE;</div>
+  
+  <!-- Three-Dot Menu -->
+  <div class="menu" id="menuDropdown">
+    <button onclick="showPage('addCustomer')">Add Customer</button>
+    <button onclick="showPage('aboutUs')">About Us</button>
+    <button onclick="goBack()">Back to Home</button>
+  </div>
+
   <!-- Main Content -->
   <div class="main" id="mainSection">
     <h1>Welcome to PNB Mini Branch</h1>
@@ -182,6 +225,12 @@
       // Save customer data (can be linked to Google Sheets here)
       alert("Customer added successfully!");
       goBack();
+    }
+
+    // Toggle Menu Visibility
+    function toggleMenu() {
+      const menu = document.getElementById("menuDropdown");
+      menu.style.display = menu.style.display === "none" ? "flex" : "none";
     }
   </script>
 </body>
