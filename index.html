@@ -11,7 +11,10 @@
       margin: 0;
       padding: 0;
       display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
     header {
       background-color: #2e7d32;
       color: white;
@@ -19,90 +22,107 @@
       text-align: center;
       font-size: 1.5rem;
       width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
     }
+
     .container {
       max-width: 800px;
-      margin: 2rem auto;
+      margin-top: 4rem;
       background: white;
       padding: 1.5rem;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 100%;
     }
-    input, button {
+
+    .search-box {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    input {
       padding: 0.6rem;
       margin: 0.3rem 0;
-      width: 100%;
+      width: 80%;
       border: 1px solid #ccc;
       border-radius: 5px;
       box-sizing: border-box;
     }
+
     button {
       background-color: #2e7d32;
       color: white;
       cursor: pointer;
       border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 5px;
     }
+
     button:hover {
       background-color: #1b5e20;
     }
-    .search-box {
-      margin-top: 1rem;
-    }
-    /* Side menu styling */
-    .side-menu {
+
+    .menu {
       position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 50px;
-      background-color: #2e7d32;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      top: 60px;
+      left: 10px;
+      background: #2e7d32;
       color: white;
-      z-index: 1000;
-    }
-    .side-menu .dot {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: white;
-      margin: 10px 0;
+      border-radius: 5px;
+      padding: 1rem;
       cursor: pointer;
-    }
-    .side-menu .options {
       display: none;
       flex-direction: column;
-      align-items: center;
-      position: absolute;
-      left: 50px;
-      background-color: #2e7d32;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      align-items: flex-start;
     }
-    .side-menu .options a {
-      color: white;
+
+    .menu.active {
+      display: flex;
+    }
+
+    .menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .menu ul li {
+      margin: 0.8rem 0;
+    }
+
+    .menu ul li a {
       text-decoration: none;
-      padding: 10px;
-      width: 100px;
-      text-align: center;
+      color: white;
+      font-size: 1rem;
     }
-    .side-menu .options a:hover {
-      background-color: #1b5e20;
+
+    .menu-button {
+      position: fixed;
+      top: 60px;
+      left: 10px;
+      background: #2e7d32;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .menu-button:hover {
+      background: #1b5e20;
     }
   </style>
 </head>
 <body>
-
   <header>
     Customer Data Manager
   </header>
 
   <div class="container">
     <div class="search-box">
-      <h3>Search Customer</h3>
       <input type="text" id="search" placeholder="Search by name..." onkeyup="searchCustomer()" />
     </div>
 
@@ -121,26 +141,23 @@
     </table>
   </div>
 
-  <!-- Side Menu -->
-  <div class="side-menu">
-    <div class="dot" onclick="toggleOptions()"></div>
-    <div class="options" id="options">
-      <a href="#" onclick="showAddCustomer()">Add Customer</a>
-      <a href="#" onclick="viewAllCustomers()">View All Customers</a>
-      <a href="#" onclick="showAboutUs()">About Us</a>
-    </div>
+  <!-- Side menu -->
+  <div class="menu" id="sideMenu">
+    <ul>
+      <li><a href="#">Add Customer</a></li>
+      <li><a href="#">View All Customers</a></li>
+      <li><a href="#">About Us</a></li>
+    </ul>
   </div>
 
-  <script>
-    const customers = [];
+  <!-- Menu button -->
+  <div class="menu-button" onclick="toggleMenu()">&#x22EE;</div>
 
-    function searchCustomer() {
-      const query = document.getElementById("search").value.toLowerCase();
-      const filtered = customers.filter(c =>
-        c.name.toLowerCase().includes(query)
-      );
-      displayCustomers(filtered);
-    }
+  <script>
+    const customers = [
+      { name: "John Doe", phone: "1234567890", email: "john@example.com", address: "123 Elm St" },
+      { name: "Jane Smith", phone: "0987654321", email: "jane@example.com", address: "456 Oak St" }
+    ];
 
     function displayCustomers(data) {
       const tableBody = document.getElementById("customerTable").querySelector("tbody");
@@ -156,26 +173,22 @@
       });
     }
 
-    function toggleOptions() {
-      const options = document.getElementById("options");
-      options.style.display = options.style.display === "none" || options.style.display === "" ? "flex" : "none";
+    function searchCustomer() {
+      const query = document.getElementById("search").value.toLowerCase();
+      const filtered = customers.filter(c =>
+        c.name.toLowerCase().includes(query)
+      );
+      displayCustomers(filtered);
     }
 
-    function showAddCustomer() {
-      alert("Add Customer option clicked!");
-      // You can redirect to a new page or show a modal for adding customers here.
+    // Toggle the side menu visibility
+    function toggleMenu() {
+      const menu = document.getElementById("sideMenu");
+      menu.classList.toggle("active");
     }
 
-    function viewAllCustomers() {
-      alert("View All Customers option clicked!");
-      // You can add functionality to view all customers here.
-    }
-
-    function showAboutUs() {
-      alert("About Us option clicked!");
-      // You can show an about us section or redirect to a page.
-    }
+    // Display all customers on page load
+    displayCustomers(customers);
   </script>
-
 </body>
 </html>
