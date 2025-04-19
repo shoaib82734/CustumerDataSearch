@@ -10,7 +10,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Poppins', 'Arial', sans-serif;
       background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
       overflow: hidden;
       box-sizing: border-box;
@@ -44,7 +44,7 @@
       justify-content: center;
       gap: var(--spacing-md);
       z-index: 1000;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
     .navbar button {
@@ -278,7 +278,7 @@
         </div>
         <div class="form-group">
           <label for="customerId">Customer ID</label>
-          <input type="text" id="customerId" placeholder="Customer ID" pattern="[A-Z0-9]{8}" aria-required="true">
+          <input type="text" id="customerId" placeholder="e.g., A12345678" pattern="[A-Z][0-9]{8}" aria-required="true">
         </div>
         <div class="form-group">
           <label for="address">Address</label>
@@ -359,21 +359,25 @@
       if (!name || !mobile || !accountNumber || !customerId || !address) {
         formError.textContent = "Please fill in all fields!";
         formError.style.display = "block";
+        console.log("Validation failed: Missing fields");
         return;
       }
       if (!/^[0-9]{10}$/.test(mobile)) {
         formError.textContent = "Please enter a valid 10-digit mobile number!";
         formError.style.display = "block";
+        console.log("Validation failed: Invalid mobile");
         return;
       }
       if (!/^[0-9]{16}$/.test(accountNumber)) {
         formError.textContent = "Account number must be 16 digits!";
         formError.style.display = "block";
+        console.log("Validation failed: Invalid account number");
         return;
       }
-      if (!/^[A-Z0-9]{8}$/.test(customerId)) {
-        formError.textContent = "Customer ID must be 8 alphanumeric characters!";
+      if (!/^[A-Z][0-9]{8}$/.test(customerId)) {
+        formError.textContent = "Customer ID must be 1 uppercase letter followed by 8 digits!";
         formError.style.display = "block";
+        console.log("Validation failed: Invalid customer ID");
         return;
       }
 
