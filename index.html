@@ -4,24 +4,59 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PNB Mini Branch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f8f8f8;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
       overflow: hidden;
     }
 
     :root {
       --pnb-yellow: #FBBC09;
-      --pnb-burgundy: #A20E37;
+      --pnb-burgundy: #8B0029;
       --spacing-sm: 0.5rem;
       --spacing-md: 1rem;
-      --font-size-lg: 2.2rem;
+      --spacing-lg: 2rem;
+      --font-size-lg: 2.4rem;
       --font-size-md: 1.8rem;
       --font-size-base: 1rem;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
+      padding: var(--spacing-md);
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-md);
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar button {
+      background: var(--pnb-burgundy);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar button:hover {
+      background: linear-gradient(135deg, #A20E37, #6B001F);
+      transform: scale(1.05);
     }
 
     /* Center Main Content */
@@ -33,98 +68,108 @@
       height: 100vh;
       text-align: center;
       box-sizing: border-box;
-      padding: var(--spacing-md);
+      padding: var(--spacing-lg);
+      margin-top: 60px; /* Offset for navbar */
     }
 
     /* Hide Pages Initially */
     .page {
       display: none;
-      padding: var(--spacing-md);
+      padding: var(--spacing-lg);
       height: 100%;
       box-sizing: border-box;
       overflow-y: auto;
-      transition: opacity 0.3s ease;
       opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .page[style*="block"] {
       opacity: 1;
+      transform: translateY(0);
     }
 
     /* Add Customer Form */
-    #addCustomer, #searchResults {
+    #addCustomer {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100%;
-      padding: var(--spacing-md);
-      margin: 0 auto;
       width: 100%;
+      max-width: 100%;
+      padding: var(--spacing-lg);
+      margin: 0 auto;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .form-container {
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      background: white;
+      padding: var(--spacing-lg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .form-group {
       width: 100%;
       max-width: 500px;
-      margin-bottom: var(--spacing-md);
+      margin: 0 auto var(--spacing-md);
+      box-sizing: border-box;
     }
 
-    #addCustomer h2, #searchResults h2 {
-      text-align: center;
+    #addCustomer h2 {
       font-size: var(--font-size-md);
+      font-weight: 600;
       margin-bottom: 1.5rem;
+      color: #333;
     }
 
     button {
-      padding: 0.7rem 1.5rem;
-      background-color: var(--pnb-burgundy);
+      padding: 0.8rem 1.5rem;
+      background: var(--pnb-burgundy);
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: var(--font-size-base);
       margin: var(--spacing-sm);
+      transition: transform 0.2s, background 0.3s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     button:hover {
-      background-color: #870b2d;
+      background: linear-gradient(135deg, #A20E37, #6B001F);
+      transform: scale(1.05);
     }
 
     .form-group input {
       width: 100%;
       padding: 0.8rem;
       margin: var(--spacing-sm) 0;
-      border-radius: 5px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       font-size: var(--font-size-base);
+      box-sizing: border-box;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--pnb-burgundy);
+      box-shadow: 0 0 8px rgba(139, 0, 41, 0.2);
+      outline: none;
     }
 
     /* Error Message */
     .error-message {
-      color: red;
+      color: #D32F2F;
       font-size: 0.9rem;
       margin: var(--spacing-sm) 0;
       display: none;
       text-align: center;
-    }
-
-    /* Search Results Table */
-    #searchResults table {
-      width: 100%;
-      max-width: 600px;
-      border-collapse: collapse;
-      margin: var(--spacing-md) 0;
-    }
-
-    #searchResults th, #searchResults td {
-      border: 1px solid #ccc;
-      padding: 0.8rem;
-      text-align: left;
-    }
-
-    #searchResults th {
-      background-color: var(--pnb-burgundy);
-      color: white;
     }
 
     /* Prevent Scrolling on Main Page */
@@ -132,48 +177,28 @@
       overflow: hidden;
     }
 
-    /* Three-Dot Menu */
-    .menu {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: white;
-      border-radius: 5px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-      display: none;
-      flex-direction: column;
-      z-index: 1000;
-    }
-
-    .menu button {
-      padding: 0.7rem;
-      text-align: left;
-      border: none;
-      background: none;
-      font-size: var(--font-size-base);
-      width: 200px;
-    }
-
-    .menu button:hover {
-      background-color: #f1f1f1;
-    }
-
-    .menu-trigger {
-      cursor: pointer;
-      padding: 0.7rem;
-      font-size: 1.5rem;
-      background-color: var(--pnb-burgundy);
-      color: white;
-      border-radius: 50%;
-      position: absolute;
-      top: 20px;
-      left: 20px;
-    }
-
     /* Logo */
     .logo {
-      max-width: 150px;
-      margin-bottom: var(--spacing-md);
+      max-width: 180px;
+      margin-bottom: var(--spacing-lg);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    /* About Us Page */
+    #aboutUs {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--spacing-lg);
+    }
+
+    #aboutUs p {
+      max-width: 600px;
+      margin: var(--spacing-sm) 0;
+      font-size: var(--font-size-base);
+      color: #333;
     }
 
     /* Responsive Design */
@@ -186,26 +211,37 @@
         font-size: 0.9rem;
         padding: 0.6rem 1rem;
       }
-      h1 { font-size: 1.8rem; }
-      h2 { font-size: 1.4rem; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.6rem; }
+      .navbar {
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+      }
+      .navbar button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      .form-container {
+        max-width: 100%;
+        padding: var(--spacing-md);
+      }
+      .main {
+        margin-top: 100px; /* Adjust for taller navbar on mobile */
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Three-Dot Menu Trigger -->
-  <div class="menu-trigger" role="button" aria-label="Open menu" onclick="toggleMenu()">⋮</div>
-  
-  <!-- Three-Dot Menu -->
-  <div class="menu" id="menuDropdown">
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <button onclick="goBack()">Home</button>
     <button onclick="showPage('addCustomer')">Add Customer</button>
-    <button onclick="showPage('searchResults')">Search Results</button>
     <button onclick="showPage('aboutUs')">About Us</button>
-    <button onclick="goBack()">Back to Home</button>
-  </div>
+  </nav>
 
   <!-- Main Content -->
   <div class="main" id="mainSection">
-    <img src="https://via.placeholder.com/150x50?text=PNB+Logo" alt="PNB Mini Branch Logo" class="logo">
+    <img src="assets/pnb-logo.png" alt="PNB Mini Branch Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=PNB+Logo'">
     <h1>Welcome to PNB Mini Branch</h1>
     <div class="form-group">
       <label for="search">Search Customer</label>
@@ -217,48 +253,34 @@
 
   <!-- Add Customer Page -->
   <div class="page" id="addCustomer">
-    <h2>Add New Customer</h2>
-    <form id="customerForm">
-      <div class="form-group">
-        <label for="name">Customer Name</label>
-        <input type="text" id="name" placeholder="Customer Name" aria-required="true">
-      </div>
-      <div class="form-group">
-        <label for="mobile">Mobile Number</label>
-        <input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true">
-      </div>
-      <div class="form-group">
-        <label for="accountNumber">Account Number</label>
-        <input type="text" id="accountNumber" placeholder="Account Number" pattern="[0-9]{12}" aria-required="true">
-      </div>
-      <div class="form-group">
-        <label for="customerId">Customer ID</label>
-        <input type="text" id="customerId" placeholder="Customer ID" pattern="[A-Z0-9]{8}" aria-required="true">
-      </div>
-      <div class="form-group">
-        <label for="address">Address</label>
-        <input type="text" id="address" placeholder="Address" aria-required="true">
-      </div>
-      <div class="error-message" id="formError"></div>
-      <button type="button" onclick="addCustomer()">Add Customer</button>
-      <button type="button" onclick="goBack()">Back to Home</button>
-    </form>
-  </div>
-
-  <!-- Search Results Page -->
-  <div class="page" id="searchResults">
-    <h2>Search Results</h2>
-    <table id="resultsTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Mobile</th>
-          <th>Account</th>
-        </tr>
-      </thead>
-      <tbody id="resultsBody"></tbody>
-    </table>
-    <button onclick="goBack()">Back to Home</button>
+    <div class="form-container">
+      <h2>Add New Customer</h2>
+      <form id="customerForm">
+        <div class="form-group">
+          <label for="name">Customer Name</label>
+          <input type="text" id="name" placeholder="Customer Name" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="mobile">Mobile Number</label>
+          <input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="accountNumber">Account Number</label>
+          <input type="text" id="accountNumber" placeholder="Account Number" pattern="[0-9]{12}" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="customerId">Customer ID</label>
+          <input type="text" id="customerId" placeholder="Customer ID" pattern="[A-Z0-9]{8}" aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" placeholder="Address" aria-required="true">
+        </div>
+        <div class="error-message" id="formError"></div>
+        <button type="button" onclick="addCustomer()">Add Customer</button>
+        <button type="button" onclick="goBack()">Back to Home</button>
+      </form>
+    </div>
   </div>
 
   <!-- About Us Page -->
@@ -266,19 +288,17 @@
     <h2>About Us</h2>
     <p><strong>Name:</strong> Mohd Shuaib</p>
     <p><strong>Business:</strong> CSC Center & PNB Mini Branch</p>
-    <p><strong>Mobile Number:</strong> 827344168</p>
-    <p><strong>Services:</strong> We provide banking services, account opening, and other customer services for PNB Mini Branch.</p>
+    <p><strong>Contact:</strong> 827344168</p>
+    <p><strong>About:</strong> I manage a CSC Center and PNB Mini Branch, offering reliable banking services, including account opening, money transfers, and customer support. Committed to providing efficient and trustworthy solutions to meet your financial needs.</p>
     <button onclick="goBack()">Back to Home</button>
   </div>
 
   <script>
     // Cached DOM Elements
     const mainSection = document.getElementById("mainSection");
-    const menuDropdown = document.getElementById("menuDropdown");
     const searchError = document.getElementById("searchError");
     const formError = document.getElementById("formError");
     const customerForm = document.getElementById("customerForm");
-    const resultsBody = document.getElementById("resultsBody");
 
     // Input Sanitization
     function sanitizeInput(input) {
@@ -289,12 +309,12 @@
 
     // Show Page Function
     function showPage(pageId) {
+      console.log("Opening page:", pageId);
       mainSection.style.display = "none";
-      document.querySelectorAll(".page").forEach(p => p grundgestyle.display = "none");
+      document.querySelectorAll(".page").forEach(p => p.style.display = "none");
       document.getElementById(pageId).style.display = "block";
-      menuDropdown.style.display = "none";
 
-      if (pageId === "addCustomer" || pageId === "searchResults") {
+      if (pageId === "addCustomer") {
         document.body.classList.add("no-scroll");
       } else {
         document.body.classList.remove("no-scroll");
@@ -376,7 +396,7 @@
       setTimeout(goBack, 2000);
     }
 
-    // Search Customer Function
+    // Search Customer Function (Placeholder)
     function searchCustomer() {
       const query = sanitizeInput(document.getElementById("search").value.trim());
       searchError.style.display = "none";
@@ -387,53 +407,11 @@
         return;
       }
 
-      // Placeholder for Google Sheets API search
-      /*
-      fetch('https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Sheet1!A:E', {
-        headers: { 'Authorization': 'Bearer YOUR_ACCESS_TOKEN' }
-      })
-      .then(response => response.json())
-      .then(data => {
-        const results = data.values.filter(row => row.some(cell => cell.toLowerCase().includes(query.toLowerCase())));
-        displaySearchResults(results);
-      });
-      */
-
-      // Mock search results for demonstration
-      const mockResults = [
-        ["John Doe", "9876543210", "123456789012"],
-        ["Jane Smith", "8765432109", "098765432109"]
-      ].filter(row => row.some(cell => cell.toLowerCase().includes(query.toLowerCase())));
-
-      displaySearchResults(mockResults);
-      showPage("searchResults");
+      // Placeholder for future search implementation
+      searchError.textContent = "Search functionality coming soon!";
+      searchError.style.color = "blue";
+      searchError.style.display = "block";
     }
-
-    // Display Search Results
-    function displaySearchResults(results) {
-      resultsBody.innerHTML = "";
-      if (results.length === 0) {
-        resultsBody.innerHTML = '<tr><td colspan="3">No results found.</td></tr>';
-        return;
-      }
-      results.forEach(row => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td>`;
-        resultsBody.appendChild(tr);
-      });
-    }
-
-    // Toggle Menu Visibility
-    function toggleMenu() {
-      menuDropdown.style.display = menuDropdown.style.display === "none" ? "flex" : "none";
-    }
-
-    // Close Menu on Outside Click
-    document.addEventListener("click", function (event) {
-      if (!menuDropdown.contains(event.target) && !document.querySelector(".menu-trigger").contains(event.target)) {
-        menuDropdown.style.display = "none";
-      }
-    });
   </script>
 </body>
 </html>
