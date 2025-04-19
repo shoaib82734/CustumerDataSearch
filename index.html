@@ -17,6 +17,9 @@
     :root {
       --pnb-yellow: #FBBC09;
       --pnb-burgundy: #A20E37;
+      --menu-bg-color: #333;
+      --menu-button-hover: #555;
+      --menu-text-color: white;
     }
 
     /* Center Main Content */
@@ -97,7 +100,7 @@
       position: absolute;
       top: 20px;
       right: 20px;
-      background-color: white;
+      background-color: var(--menu-bg-color);
       border-radius: 5px;
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
       display: none;
@@ -110,11 +113,12 @@
       border: none;
       background: none;
       font-size: 1rem;
+      color: var(--menu-text-color);
       width: 200px;
     }
 
     .menu button:hover {
-      background-color: #f1f1f1;
+      background-color: var(--menu-button-hover);
     }
 
     .menu-trigger {
@@ -268,23 +272,27 @@
       let valid = true;
 
       if (!name) {
-        showError("nameError", "Please enter the customer name.");
+        showError("nameError", "Name is required.");
         valid = false;
       }
-      if (!mobile || mobile.length !== 10 || isNaN(mobile)) {
+
+      if (!mobile || !/^\d{10}$/.test(mobile)) {
         showError("mobileError", "Please enter a valid 10-digit mobile number.");
         valid = false;
       }
+
       if (!accountNumber) {
-        showError("accountNumberError", "Please enter the account number.");
+        showError("accountNumberError", "Account number is required.");
         valid = false;
       }
+
       if (!customerId) {
-        showError("customerIdError", "Please enter the customer ID.");
+        showError("customerIdError", "Customer ID is required.");
         valid = false;
       }
+
       if (!address) {
-        showError("addressError", "Please enter the address.");
+        showError("addressError", "Address is required.");
         valid = false;
       }
 
@@ -294,31 +302,18 @@
       }
     }
 
-    // Show Error Messages
-    function showError(id, message) {
-      document.getElementById(id).textContent = message;
+    function showError(field, message) {
+      document.getElementById(field).innerText = message;
     }
 
-    // Clear Error Messages
     function clearErrors() {
-      const errorMessages = document.querySelectorAll(".error-message");
-      errorMessages.forEach(error => error.textContent = "");
+      document.querySelectorAll(".error-message").forEach(e => e.innerText = "");
     }
 
     // Toggle Menu
     function toggleMenu() {
       const menu = document.getElementById("menuDropdown");
-      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-    }
-
-    // Search Customer
-    function searchCustomer() {
-      const searchQuery = document.getElementById("searchBar").value.toLowerCase();
-      const customerData = [
-        // Add your customer data here
-      ];
-      const results = customerData.filter(customer => customer.name.toLowerCase().includes(searchQuery));
-      console.log(results); // Update with how you want to display the results
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
   </script>
 </body>
