@@ -17,6 +17,11 @@
     :root {
       --pnb-yellow: #FBBC09;
       --pnb-burgundy: #A20E37;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --font-size-lg: 2.2rem;
+      --font-size-md: 1.8rem;
+      --font-size-base: 1rem;
     }
 
     /* Center Main Content */
@@ -28,39 +33,45 @@
       height: 100vh;
       text-align: center;
       box-sizing: border-box;
-      padding: 2rem;
+      padding: var(--spacing-md);
     }
 
     /* Hide Pages Initially */
     .page {
       display: none;
-      padding: 2rem;
+      padding: var(--spacing-md);
       height: 100%;
       box-sizing: border-box;
       overflow-y: auto;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .page[style*="block"] {
+      opacity: 1;
     }
 
     /* Add Customer Form */
-    #addCustomer {
+    #addCustomer, #searchResults {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100%;
-      padding: 2rem;
+      padding: var(--spacing-md);
       margin: 0 auto;
       width: 100%;
     }
 
-    #addCustomer .form-group {
+    .form-group {
       width: 100%;
       max-width: 500px;
-      margin-bottom: 1rem;
+      margin-bottom: var(--spacing-md);
     }
 
-    #addCustomer h2 {
+    #addCustomer h2, #searchResults h2 {
       text-align: center;
-      font-size: 1.8rem;
+      font-size: var(--font-size-md);
       margin-bottom: 1.5rem;
     }
 
@@ -71,8 +82,8 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 1rem;
-      margin: 0.5rem;
+      font-size: var(--font-size-base);
+      margin: var(--spacing-sm);
     }
 
     button:hover {
@@ -82,9 +93,38 @@
     .form-group input {
       width: 100%;
       padding: 0.8rem;
-      margin: 0.5rem 0;
+      margin: var(--spacing-sm) 0;
       border-radius: 5px;
       border: 1px solid #ccc;
+      font-size: var(--font-size-base);
+    }
+
+    /* Error Message */
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin: var(--spacing-sm) 0;
+      display: none;
+      text-align: center;
+    }
+
+    /* Search Results Table */
+    #searchResults table {
+      width: 100%;
+      max-width: 600px;
+      border-collapse: collapse;
+      margin: var(--spacing-md) 0;
+    }
+
+    #searchResults th, #searchResults td {
+      border: 1px solid #ccc;
+      padding: 0.8rem;
+      text-align: left;
+    }
+
+    #searchResults th {
+      background-color: var(--pnb-burgundy);
+      color: white;
     }
 
     /* Prevent Scrolling on Main Page */
@@ -102,6 +142,7 @@
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
       display: none;
       flex-direction: column;
+      z-index: 1000;
     }
 
     .menu button {
@@ -109,7 +150,7 @@
       text-align: left;
       border: none;
       background: none;
-      font-size: 1rem;
+      font-size: var(--font-size-base);
       width: 200px;
     }
 
@@ -128,53 +169,95 @@
       top: 20px;
       left: 20px;
     }
+
+    /* Logo */
+    .logo {
+      max-width: 150px;
+      margin-bottom: var(--spacing-md);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .form-group input {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+      }
+      button {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+      }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.4rem; }
+    }
   </style>
 </head>
 <body>
   <!-- Three-Dot Menu Trigger -->
-  <div class="menu-trigger" onclick="toggleMenu()">&#x22EE;</div>
+  <div class="menu-trigger" role="button" aria-label="Open menu" onclick="toggleMenu()">⋮</div>
   
   <!-- Three-Dot Menu -->
   <div class="menu" id="menuDropdown">
     <button onclick="showPage('addCustomer')">Add Customer</button>
+    <button onclick="showPage('searchResults')">Search Results</button>
     <button onclick="showPage('aboutUs')">About Us</button>
     <button onclick="goBack()">Back to Home</button>
   </div>
 
   <!-- Main Content -->
   <div class="main" id="mainSection">
+    <img src="https://via.placeholder.com/150x50?text=PNB+Logo" alt="PNB Mini Branch Logo" class="logo">
     <h1>Welcome to PNB Mini Branch</h1>
     <div class="form-group">
       <label for="search">Search Customer</label>
-      <input type="text" id="search" placeholder="Enter Customer Info (Name, Mobile, Account, etc.)">
+      <input type="text" id="search" placeholder="Enter Name, Mobile, Account, etc." aria-required="true">
     </div>
+    <div class="error-message" id="searchError"></div>
     <button onclick="searchCustomer()">Search</button>
   </div>
 
   <!-- Add Customer Page -->
   <div class="page" id="addCustomer">
     <h2>Add New Customer</h2>
-    <div class="form-group">
-      <label for="name">Customer Name</label>
-      <input type="text" id="name" placeholder="Customer Name">
-    </div>
-    <div class="form-group">
-      <label for="mobile">Mobile Number</label>
-      <input type="text" id="mobile" placeholder="Mobile Number">
-    </div>
-    <div class="form-group">
-      <label for="accountNumber">Account Number</label>
-      <input type="text" id="accountNumber" placeholder="Account Number">
-    </div>
-    <div class="form-group">
-      <label for="customerId">Customer ID</label>
-      <input type="text" id="customerId" placeholder="Customer ID">
-    </div>
-    <div class="form-group">
-      <label for="address">Address</label>
-      <input type="text" id="address" placeholder="Address">
-    </div>
-    <button onclick="addCustomer()">Add Customer</button>
+    <form id="customerForm">
+      <div class="form-group">
+        <label for="name">Customer Name</label>
+        <input type="text" id="name" placeholder="Customer Name" aria-required="true">
+      </div>
+      <div class="form-group">
+        <label for="mobile">Mobile Number</label>
+        <input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true">
+      </div>
+      <div class="form-group">
+        <label for="accountNumber">Account Number</label>
+        <input type="text" id="accountNumber" placeholder="Account Number" pattern="[0-9]{12}" aria-required="true">
+      </div>
+      <div class="form-group">
+        <label for="customerId">Customer ID</label>
+        <input type="text" id="customerId" placeholder="Customer ID" pattern="[A-Z0-9]{8}" aria-required="true">
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" placeholder="Address" aria-required="true">
+      </div>
+      <div class="error-message" id="formError"></div>
+      <button type="button" onclick="addCustomer()">Add Customer</button>
+      <button type="button" onclick="goBack()">Back to Home</button>
+    </form>
+  </div>
+
+  <!-- Search Results Page -->
+  <div class="page" id="searchResults">
+    <h2>Search Results</h2>
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Account</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
     <button onclick="goBack()">Back to Home</button>
   </div>
 
@@ -189,14 +272,29 @@
   </div>
 
   <script>
+    // Cached DOM Elements
+    const mainSection = document.getElementById("mainSection");
+    const menuDropdown = document.getElementById("menuDropdown");
+    const searchError = document.getElementById("searchError");
+    const formError = document.getElementById("formError");
+    const customerForm = document.getElementById("customerForm");
+    const resultsBody = document.getElementById("resultsBody");
+
+    // Input Sanitization
+    function sanitizeInput(input) {
+      const div = document.createElement("div");
+      div.textContent = input;
+      return div.innerHTML;
+    }
+
     // Show Page Function
     function showPage(pageId) {
-      document.getElementById("mainSection").style.display = "none";
-      document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+      mainSection.style.display = "none";
+      document.querySelectorAll(".page").forEach(p => p grundgestyle.display = "none");
       document.getElementById(pageId).style.display = "block";
-      document.getElementById("menuDropdown").style.display = "none";
-  
-      if (pageId === "addCustomer") {
+      menuDropdown.style.display = "none";
+
+      if (pageId === "addCustomer" || pageId === "searchResults") {
         document.body.classList.add("no-scroll");
       } else {
         document.body.classList.remove("no-scroll");
@@ -205,51 +303,137 @@
 
     // Go Back Function
     function goBack() {
-      document.getElementById("mainSection").style.display = "flex";
+      mainSection.style.display = "flex";
       document.querySelectorAll(".page").forEach(p => p.style.display = "none");
       document.body.classList.remove("no-scroll");
+      searchError.style.display = "none";
+      formError.style.display = "none";
     }
 
     // Add Customer Function
     function addCustomer() {
-      const name = document.getElementById("name").value;
-      const mobile = document.getElementById("mobile").value;
-      const accountNumber = document.getElementById("accountNumber").value;
-      const customerId = document.getElementById("customerId").value;
-      const address = document.getElementById("address").value;
+      const name = sanitizeInput(document.getElementById("name").value.trim());
+      const mobile = document.getElementById("mobile").value.trim();
+      const accountNumber = document.getElementById("accountNumber").value.trim();
+      const customerId = document.getElementById("customerId").value.trim();
+      const address = sanitizeInput(document.getElementById("address").value.trim());
 
+      formError.style.display = "none";
+
+      // Validation
       if (!name || !mobile || !accountNumber || !customerId || !address) {
-        alert("Please fill in all fields!");
+        formError.textContent = "Please fill in all fields!";
+        formError.style.display = "block";
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(mobile)) {
+        formError.textContent = "Please enter a valid 10-digit mobile number!";
+        formError.style.display = "block";
+        return;
+      }
+      if (!/^[0-9]{12}$/.test(accountNumber)) {
+        formError.textContent = "Account number must be 12 digits!";
+        formError.style.display = "block";
+        return;
+      }
+      if (!/^[A-Z0-9]{8}$/.test(customerId)) {
+        formError.textContent = "Customer ID must be 8 alphanumeric characters!";
+        formError.style.display = "block";
         return;
       }
 
-      if (mobile.length !== 10 || isNaN(mobile)) {
-        alert("Please enter a valid mobile number!");
-        return;
-      }
+      // Placeholder for Google Sheets API integration
+      /*
+      fetch('https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Sheet1!A:E:append?valueInputOption=RAW', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          values: [[name, mobile, accountNumber, customerId, address]]
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        formError.textContent = "Customer added successfully!";
+        formError.style.color = "green";
+        formError.style.display = "block";
+        customerForm.reset();
+        setTimeout(goBack, 2000);
+      })
+      .catch(error => {
+        formError.textContent = "Error adding customer!";
+        formError.style.display = "block";
+      });
+      */
 
-      // Save customer data (can be linked to Google Sheets here)
-      alert("Customer added successfully!");
-      goBack();
+      // Temporary success message
+      formError.textContent = "Customer added successfully!";
+      formError.style.color = "green";
+      formError.style.display = "block";
+      customerForm.reset();
+      setTimeout(goBack, 2000);
     }
 
     // Search Customer Function
     function searchCustomer() {
-      const query = document.getElementById("search").value;
+      const query = sanitizeInput(document.getElementById("search").value.trim());
+      searchError.style.display = "none";
+
       if (!query) {
-        alert("Please enter a search query!");
+        searchError.textContent = "Please enter a search query!";
+        searchError.style.display = "block";
         return;
       }
 
-      // Perform search logic (e.g., search from Google Sheets)
-      console.log("Searching for: " + query);
+      // Placeholder for Google Sheets API search
+      /*
+      fetch('https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Sheet1!A:E', {
+        headers: { 'Authorization': 'Bearer YOUR_ACCESS_TOKEN' }
+      })
+      .then(response => response.json())
+      .then(data => {
+        const results = data.values.filter(row => row.some(cell => cell.toLowerCase().includes(query.toLowerCase())));
+        displaySearchResults(results);
+      });
+      */
+
+      // Mock search results for demonstration
+      const mockResults = [
+        ["John Doe", "9876543210", "123456789012"],
+        ["Jane Smith", "8765432109", "098765432109"]
+      ].filter(row => row.some(cell => cell.toLowerCase().includes(query.toLowerCase())));
+
+      displaySearchResults(mockResults);
+      showPage("searchResults");
+    }
+
+    // Display Search Results
+    function displaySearchResults(results) {
+      resultsBody.innerHTML = "";
+      if (results.length === 0) {
+        resultsBody.innerHTML = '<tr><td colspan="3">No results found.</td></tr>';
+        return;
+      }
+      results.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td>`;
+        resultsBody.appendChild(tr);
+      });
     }
 
     // Toggle Menu Visibility
     function toggleMenu() {
-      const menu = document.getElementById("menuDropdown");
-      menu.style.display = menu.style.display === "none" ? "flex" : "none";
+      menuDropdown.style.display = menuDropdown.style.display === "none" ? "flex" : "none";
     }
+
+    // Close Menu on Outside Click
+    document.addEventListener("click", function (event) {
+      if (!menuDropdown.contains(event.target) && !document.querySelector(".menu-trigger").contains(event.target)) {
+        menuDropdown.style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>
