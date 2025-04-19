@@ -5,234 +5,228 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PNB Mini Branch</title>
   <style>
+    :root {
+      --pnb-color: #7a003c;
+      --accent-color: #ffcc00;
+    }
+
     body {
       margin: 0;
+      padding: 0;
       font-family: "Segoe UI", sans-serif;
-      background-color: #fff8f0;
+      background-color: #f8f8f8;
+      overflow: hidden;
     }
 
     header {
-      background-color: #a30000; /* PNB dark red */
+      background-color: var(--pnb-color);
       color: white;
       padding: 1rem;
       text-align: center;
-      position: relative;
-    }
-
-    .menu-btn {
-      position: absolute;
-      left: 1rem;
-      top: 1rem;
       font-size: 1.5rem;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-
-    #menu {
-      display: none;
-      position: absolute;
-      top: 60px;
-      left: 1rem;
-      background-color: #fce8a0; /* PNB yellow */
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      flex-direction: column;
-      z-index: 1000;
-    }
-
-    #menu button {
-      background: none;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      text-align: left;
-      cursor: pointer;
-      font-weight: bold;
-      color: #a30000;
-    }
-
-    #menu button:hover {
-      background-color: #fff4c2;
     }
 
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      padding-top: 4rem;
+      height: calc(100vh - 70px);
+      padding: 1rem;
     }
 
-    .search-box {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      width: 90%;
+    .search-container,
+    .form-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       max-width: 400px;
+      width: 100%;
     }
 
-    input, button {
+    .form-container {
+      display: none;
+    }
+
+    .search-container input {
+      width: 100%;
       padding: 0.8rem;
-      font-size: 1rem;
+      margin-top: 1rem;
       border-radius: 5px;
       border: 1px solid #ccc;
-      box-sizing: border-box;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
 
     button {
-      background-color: #a30000;
+      background-color: var(--pnb-color);
       color: white;
+      padding: 0.7rem 1.2rem;
       border: none;
+      border-radius: 5px;
       cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
     }
 
     button:hover {
-      background-color: #750000;
+      background-color: #5a002f;
     }
 
-    /* Add Customer Section */
-    #addCustomerSection, #aboutUsSection {
+    .menu {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+    }
+
+    .dropdown {
       display: none;
-      padding: 2rem;
+      position: absolute;
+      top: 2.5rem;
+      left: 0;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
     }
 
-    #addCustomerSection input {
-      margin-bottom: 1rem;
-      width: 100%;
+    .dropdown a {
+      display: block;
+      padding: 0.7rem 1rem;
+      color: black;
+      text-decoration: none;
     }
 
-    #successMsg {
+    .dropdown a:hover {
+      background-color: #eee;
+    }
+
+    .success-message {
       color: green;
-      font-weight: bold;
       margin-top: 1rem;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 100px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    PNB Mini Branch
-    <div id="menu">
-      <button onclick="goHome()">Home</button>
-      <button onclick="showAddCustomer()">Add Customer</button>
-      <button onclick="showAboutUs()">About Us</button>
+    <div class="menu">
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
+      <div class="dropdown" id="menuDropdown">
+        <a href="#" onclick="showForm()">Add Customer</a>
+        <a href="#" onclick="showAbout()">About Us</a>
+      </div>
     </div>
+    PNB Mini Branch
   </header>
 
-  <!-- Home/Search Section -->
-  <div class="container" id="mainContainer">
-    <div class="search-box" id="searchBox">
-      <input type="text" id="search" placeholder="Enter Name or Mobile Number" />
-      <button onclick="searchCustomer()">Search</button>
+  <div class="container">
+    <div class="search-container" id="searchSection">
+      <h2>Search Customer</h2>
+      <input type="text" placeholder="Enter Customer Name..." />
     </div>
-  </div>
 
-  <!-- Add Customer Section -->
-  <div id="addCustomerSection">
-    <h2>Add New Customer</h2>
-    <input type="text" id="name" placeholder="Customer Name" />
-    <input type="text" id="mobile" placeholder="Mobile Number" oninput="validateMobile(this)" />
-    <input type="text" id="accountNumber" placeholder="Account Number" />
-    <input type="text" id="customerId" placeholder="Customer ID" />
-    <input type="text" id="address" placeholder="Address" />
-    <button onclick="submitCustomer()">Add Customer</button>
-    <div id="successMsg"></div>
-    <br />
-    <button onclick="goHome()">Back to Home</button>
-  </div>
-
-  <!-- About Us Section -->
-  <div id="aboutUsSection">
-    <h2>About Us</h2>
-    <p>
-      My name is <strong>Mohd Shuaib</strong>, and I run a <strong>CSC Center</strong> along with a <strong>PNB Mini Branch</strong> to assist customers with banking services at their convenience.  
-      <br><br>
-      Our center is committed to offering reliable, fast, and secure services including account opening, cash deposit/withdrawal, and customer support.  
-      <br><br>
-      📞 <strong>Contact:</strong> 827344168  
-    </p>
-    <br>
-    <button onclick="goHome()">Back to Home</button>
+    <div class="form-container" id="formSection">
+      <h2>Add Customer</h2>
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="name" placeholder="Enter name" required />
+      </div>
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="text" id="mobile" placeholder="10-digit mobile number" maxlength="10" oninput="validateMobile(this)" required />
+      </div>
+      <div class="form-group">
+        <label>Account Number</label>
+        <input type="text" id="account" placeholder="Enter account number" required />
+      </div>
+      <div class="form-group">
+        <label>Customer ID</label>
+        <input type="text" id="custId" placeholder="Enter customer ID" required />
+      </div>
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text" id="address" placeholder="Enter address" required />
+      </div>
+      <button onclick="submitCustomer()">Add</button>
+      <div class="success-message" id="successMsg"></div>
+      <button onclick="backToHome()" style="margin-top: 1rem; background-color: gray;">Back to Home</button>
+    </div>
   </div>
 
   <script>
     function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-      menu.style.flexDirection = "column";
+      const dropdown = document.getElementById("menuDropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     }
 
-    function showAddCustomer() {
-      document.getElementById("mainContainer").style.display = "none";
-      document.getElementById("addCustomerSection").style.display = "block";
-      document.getElementById("aboutUsSection").style.display = "none";
-      document.getElementById("successMsg").innerText = "";
+    function showForm() {
+      document.getElementById("searchSection").style.display = "none";
+      document.getElementById("formSection").style.display = "block";
+      document.getElementById("menuDropdown").style.display = "none";
     }
 
-    function showAboutUs() {
-      document.getElementById("mainContainer").style.display = "none";
-      document.getElementById("addCustomerSection").style.display = "none";
-      document.getElementById("aboutUsSection").style.display = "block";
-    }
-
-    function goHome() {
-      document.getElementById("mainContainer").style.display = "flex";
-      document.getElementById("addCustomerSection").style.display = "none";
-      document.getElementById("aboutUsSection").style.display = "none";
+    function backToHome() {
+      document.getElementById("formSection").style.display = "none";
+      document.getElementById("searchSection").style.display = "block";
     }
 
     function validateMobile(input) {
       const value = input.value;
-      if (!/^\d*$/.test(value)) {
-        alert("Mobile number must contain only digits.");
-        input.value = value.replace(/\D/g, '');
+      const isNumeric = /^\d*$/.test(value);
+      if (!isNumeric || value.length > 10) {
+        input.style.borderColor = "red";
+      } else {
+        input.style.borderColor = "#ccc";
       }
     }
 
     function submitCustomer() {
       const name = document.getElementById("name").value.trim();
       const mobile = document.getElementById("mobile").value.trim();
-      const accountNumber = document.getElementById("accountNumber").value.trim();
-      const customerId = document.getElementById("customerId").value.trim();
+      const account = document.getElementById("account").value.trim();
+      const custId = document.getElementById("custId").value.trim();
       const address = document.getElementById("address").value.trim();
 
-      if (!name || !mobile || !accountNumber || !customerId || !address) {
-        alert("Please fill in all fields.");
+      if (!name || mobile.length !== 10 || !account || !custId || !address) {
+        alert("Please fill all fields correctly.");
         return;
       }
 
-      if (mobile.length !== 10) {
-        alert("Mobile number must be 10 digits.");
-        return;
-      }
-
-      // Google Sheet Integration Here (next step)
-      document.getElementById("successMsg").innerText = "Customer data added successfully!";
-      document.getElementById("name").value = "";
-      document.getElementById("mobile").value = "";
-      document.getElementById("accountNumber").value = "";
-      document.getElementById("customerId").value = "";
-      document.getElementById("address").value = "";
+      // Here we'll connect to Google Sheet later
+      document.getElementById("successMsg").innerText = "Customer added successfully!";
+      setTimeout(() => {
+        document.getElementById("successMsg").innerText = "";
+        backToHome();
+      }, 2000);
     }
 
-    function searchCustomer() {
-      const keyword = document.getElementById("search").value.trim();
-      if (!keyword) {
-        alert("Please enter name or mobile number to search.");
-        return;
-      }
-
-      // Google Sheet Search Logic (next step)
-      alert("Search feature coming soon! Will be connected to Google Sheet.");
+    function showAbout() {
+      alert("Name: Mohd Shuaib\nCenter: CSC & PNB Mini Branch\nMobile: 827344168");
     }
   </script>
-
 </body>
 </html>
