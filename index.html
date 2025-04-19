@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>PNB Mini Branch</title>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'">
+  <!-- Optimized Google Fonts: Import instead of preload for better performance -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body, html {
       margin: 0;
@@ -12,8 +13,8 @@
       height: 100%;
       font-family: 'Poppins', 'Arial', sans-serif;
       background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
-      overflow: hidden;
       box-sizing: border-box;
+      /* Removed overflow: hidden to allow scrolling on mobile */
     }
 
     :root {
@@ -21,10 +22,10 @@
       --pnb-burgundy: #8B0029;
       --spacing-sm: 0.5rem;
       --spacing-md: 1rem;
-      --spacing-lg: 2rem;
-      --font-size-lg: 2.4rem;
-      --font-size-md: 1.8rem;
-      --font-size-base: 1rem;
+      --spacing-lg: 1.5rem; /* Reduced for mobile */
+      --font-size-lg: clamp(1.8rem, 5vw, 2.2rem); /* Responsive font size */
+      --font-size-md: clamp(1.4rem, 4vw, 1.6rem);
+      --font-size-base: clamp(0.9rem, 3vw, 1rem);
     }
 
     *, *:before, *:after {
@@ -37,12 +38,12 @@
       top: 0;
       left: 0;
       right: 0;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(5px);
-      padding: var(--spacing-md);
+      padding: var(--spacing-sm);
       display: flex;
       justify-content: center;
-      gap: var(--spacing-md);
+      gap: var(--spacing-sm);
       z-index: 1000;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
@@ -51,12 +52,13 @@
       background: var(--pnb-burgundy);
       color: white;
       border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 8px;
+      padding: 0.6rem 1.2rem; /* Reduced for mobile */
+      border-radius: 6px;
       font-size: var(--font-size-base);
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: background 0.3s;
+      min-width: 80px; /* Touch-friendly */
     }
 
     .navbar button:hover {
@@ -69,17 +71,17 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
-      padding: var(--spacing-lg);
-      margin-top: 60px; /* Offset for navbar */
+      padding: var(--spacing-md);
+      margin-top: 50px; /* Adjusted for navbar */
     }
 
     /* Hide Pages Initially */
     .page {
       display: none;
-      padding: var(--spacing-lg);
-      height: 100%;
+      padding: var(--spacing-md);
+      min-height: 100vh;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -94,54 +96,56 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       width: 100%;
-      padding: var(--spacing-md);
+      padding: var(--spacing-sm);
       text-align: center;
     }
 
     .form-container {
-      max-width: 600px;
+      max-width: 90%; /* Better for mobile */
       width: 100%;
-      max-height: calc(100vh - 100px);
+      max-height: calc(100vh - 120px);
       margin: 0 auto;
       background: white;
-      padding: 0.8rem;
-      border-radius: 12px;
+      padding: var(--spacing-md);
+      border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       overflow-y: auto;
     }
 
     .form-group {
       width: 100%;
-      max-width: 500px;
+      max-width: 400px; /* Smaller for mobile */
       margin: 0 auto var(--spacing-sm);
     }
 
     .form-group label {
-      font-size: 0.9rem;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       color: #333;
       line-height: 1.4;
+      display: block;
     }
 
     #addCustomer h2 {
       font-size: var(--font-size-md);
       font-weight: 600;
-      margin-bottom: 0.8rem;
+      margin-bottom: var(--spacing-sm);
       color: #333;
     }
 
     button {
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem; /* Smaller for mobile */
       background: var(--pnb-burgundy);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: var(--font-size-base);
       margin: var(--spacing-sm);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: background 0.3s;
+      min-width: 100px; /* Touch-friendly */
     }
 
     button:hover {
@@ -150,9 +154,9 @@
 
     .form-group input {
       width: 100%;
-      padding: 0.6rem;
+      padding: 0.5rem;
       margin: var(--spacing-sm) 0;
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid #ccc;
       font-size: var(--font-size-base);
       line-height: 1.4;
@@ -167,7 +171,7 @@
     /* Error Message */
     .error-message {
       color: #D32F2F;
-      font-size: 0.9rem;
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       margin: var(--spacing-sm) 0;
       display: none;
       text-align: center;
@@ -175,7 +179,7 @@
 
     /* About Us Page */
     #aboutUs {
-      height: 100vh;
+      min-height: 100vh;
       padding: var(--spacing-md);
       display: flex;
       flex-direction: column;
@@ -185,11 +189,11 @@
     }
 
     .content-container {
-      max-width: 600px;
+      max-width: 90%; /* Better for mobile */
       width: 100%;
       background: white;
-      padding: 1rem;
-      border-radius: 12px;
+      padding: var(--spacing-md);
+      border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       margin: 0 auto;
     }
@@ -197,12 +201,12 @@
     #aboutUs h2 {
       font-size: var(--font-size-md);
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: var(--spacing-sm);
       color: #333;
     }
 
     #aboutUs p {
-      font-size: 0.95rem;
+      font-size: clamp(0.85rem, 2.5vw, 0.95rem);
       line-height: 1.6;
       margin: var(--spacing-sm) 0;
       color: #333;
@@ -221,47 +225,64 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Prevent Scrolling on Main Page */
+    /* Prevent Scrolling on Form Page Only */
     .no-scroll {
       overflow: hidden;
     }
 
     /* Responsive Design */
     @media (max-width: 600px) {
-      .form-group input {
-        font-size: 0.85rem;
-        padding: 0.4rem;
-      }
-      .form-group label {
-        font-size: 0.8rem;
-      }
-      button {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
-      }
-      h1 { font-size: 2rem; }
-      h2 { font-size: 1.6rem; }
       .navbar {
-        flex-wrap: wrap;
-        gap: var(--spacing-sm);
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: center;
+        padding: 0.5rem;
       }
       .navbar button {
-        padding: 0.6rem 1rem;
-        font-size: 0.85rem;
-      }
-      .form-container, .content-container {
-        max-width: 100%;
-        padding: 0.8rem;
-        max-height: calc(100vh - 140px);
+        width: 80%; /* Full-width buttons */
+        margin: 0.3rem 0;
+        padding: 0.5rem;
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       }
       .main {
-        margin-top: 100px;
+        margin-top: 120px; /* More space for stacked navbar */
+        padding: 0.5rem;
+      }
+      .form-container, .content-container {
+        max-width: 95%;
+        padding: 0.5rem;
+        max-height: calc(100vh - 150px);
       }
       .form-group {
         max-width: 100%;
       }
+      .form-group input {
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        padding: 0.4rem;
+      }
+      .form-group label {
+        font-size: clamp(0.75rem, 2vw, 0.85rem);
+      }
+      button {
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        padding: 0.4rem 0.8rem;
+      }
+      h1 {
+        font-size: clamp(1.6rem, 5vw, 1.8rem);
+      }
+      h2 {
+        font-size: clamp(1.2rem, 4vw, 1.4rem);
+      }
       #aboutUs p {
-        font-size: 0.9rem;
+        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      }
+    }
+
+    @media (min-width: 601px) {
+      .navbar {
+        flex-direction: row; /* Horizontal on larger screens */
+      }
+      .navbar button {
+        width: auto;
       }
     }
   </style>
