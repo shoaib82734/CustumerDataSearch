@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PNB Mini Branch</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'">
   <style>
     body, html {
       margin: 0;
@@ -13,6 +13,7 @@
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
       overflow: hidden;
+      box-sizing: border-box;
     }
 
     :root {
@@ -24,6 +25,10 @@
       --font-size-lg: 2.4rem;
       --font-size-md: 1.8rem;
       --font-size-base: 1rem;
+    }
+
+    *, *:before, *:after {
+      box-sizing: inherit;
     }
 
     /* Navigation Bar */
@@ -50,13 +55,12 @@
       border-radius: 8px;
       font-size: var(--font-size-base);
       cursor: pointer;
-      transition: transform 0.2s, background 0.3s;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s;
     }
 
     .navbar button:hover {
       background: linear-gradient(135deg, #A20E37, #6B001F);
-      transform: scale(1.05);
     }
 
     /* Center Main Content */
@@ -67,7 +71,6 @@
       justify-content: center;
       height: 100vh;
       text-align: center;
-      box-sizing: border-box;
       padding: var(--spacing-lg);
       margin-top: 60px; /* Offset for navbar */
     }
@@ -77,16 +80,12 @@
       display: none;
       padding: var(--spacing-lg);
       height: 100%;
-      box-sizing: border-box;
-      overflow-y: auto;
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition: opacity 0.3s ease;
     }
 
     .page[style*="block"] {
       opacity: 1;
-      transform: translateY(0);
     }
 
     /* Add Customer Form */
@@ -97,20 +96,17 @@
       justify-content: center;
       height: 100vh;
       width: 100%;
-      max-width: 100%;
       padding: var(--spacing-md);
-      margin: 0 auto;
       text-align: center;
-      box-sizing: border-box;
     }
 
     .form-container {
       max-width: 600px;
       width: 100%;
-      max-height: calc(100vh - 120px); /* Account for navbar and margins */
+      max-height: calc(100vh - 100px);
       margin: 0 auto;
       background: white;
-      padding: var(--spacing-md);
+      padding: 0.8rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       overflow-y: auto;
@@ -120,13 +116,18 @@
       width: 100%;
       max-width: 500px;
       margin: 0 auto var(--spacing-sm);
-      box-sizing: border-box;
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
+      color: #333;
+      line-height: 1.4;
     }
 
     #addCustomer h2 {
       font-size: var(--font-size-md);
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       color: #333;
     }
 
@@ -139,13 +140,12 @@
       cursor: pointer;
       font-size: var(--font-size-base);
       margin: var(--spacing-sm);
-      transition: transform 0.2s, background 0.3s;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s;
     }
 
     button:hover {
       background: linear-gradient(135deg, #A20E37, #6B001F);
-      transform: scale(1.05);
     }
 
     .form-group input {
@@ -155,13 +155,12 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: var(--font-size-base);
-      box-sizing: border-box;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      line-height: 1.4;
+      transition: border-color 0.3s;
     }
 
     .form-group input:focus {
       border-color: var(--pnb-burgundy);
-      box-shadow: 0 0 8px rgba(139, 0, 41, 0.2);
       outline: none;
     }
 
@@ -181,7 +180,7 @@
 
     /* Logo */
     .logo {
-      max-width: 180px;
+      max-width: 150px;
       margin-bottom: var(--spacing-lg);
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
     }
@@ -207,11 +206,14 @@
     @media (max-width: 600px) {
       .form-group input {
         font-size: 0.85rem;
-        padding: 0.5rem;
+        padding: 0.4rem;
+      }
+      .form-group label {
+        font-size: 0.8rem;
       }
       button {
         font-size: 0.85rem;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.8rem;
       }
       h1 { font-size: 2rem; }
       h2 { font-size: 1.6rem; }
@@ -225,11 +227,11 @@
       }
       .form-container {
         max-width: 100%;
-        padding: var(--spacing-sm);
-        max-height: calc(100vh - 140px); /* Adjust for taller navbar */
+        padding: 0.6rem;
+        max-height: calc(100vh - 140px);
       }
       .main {
-        margin-top: 100px; /* Adjust for taller navbar on mobile */
+        margin-top: 100px;
       }
       .form-group {
         max-width: 100%;
@@ -247,7 +249,7 @@
 
   <!-- Main Content -->
   <div class="main" id="mainSection">
-    <img src="assets/pnb-logo.png" alt="PNB Mini Branch Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=PNB+Logo'">
+    <img src="assets/pnb-logo.png" alt="PNB Mini Branch Logo" class="logo" loading="lazy" onerror="this.src='https://via.placeholder.com/150x50?text=PNB+Logo'">
     <h1>Welcome to PNB Mini Branch</h1>
     <div class="form-group">
       <label for="search">Search Customer</label>
@@ -272,7 +274,7 @@
         </div>
         <div class="form-group">
           <label for="accountNumber">Account Number</label>
-          <input type="text" id="accountNumber" placeholder="Account Number" pattern="[0-9]{12}" aria-required="true">
+          <input type="text" id="accountNumber" placeholder="16-digit Account Number" pattern="[0-9]{16}" aria-required="true">
         </div>
         <div class="form-group">
           <label for="customerId">Customer ID</label>
@@ -300,11 +302,15 @@
   </div>
 
   <script>
+    // Measure load time
+    const startTime = performance.now();
+
     // Cached DOM Elements
     const mainSection = document.getElementById("mainSection");
     const searchError = document.getElementById("searchError");
     const formError = document.getElementById("formError");
     const customerForm = document.getElementById("customerForm");
+    const pages = document.querySelectorAll(".page");
 
     // Input Sanitization
     function sanitizeInput(input) {
@@ -317,13 +323,14 @@
     function showPage(pageId) {
       console.log("Opening page:", pageId);
       mainSection.style.display = "none";
-      document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-      document.getElementById(pageId).style.display = "block";
+      pages.forEach(p => p.style.display = "none");
+      const targetPage = document.getElementById(pageId);
+      targetPage.style.display = "block";
 
       if (pageId === "addCustomer") {
         document.body.classList.add("no-scroll");
-        const formContainer = document.querySelector(".form-container");
-        console.log("Form container height:", formContainer.offsetHeight);
+        const formContainer = targetPage.querySelector(".form-container");
+        console.log("Form container height:", formContainer.offsetHeight, "Viewport height:", window.innerHeight);
       } else {
         document.body.classList.remove("no-scroll");
       }
@@ -332,7 +339,7 @@
     // Go Back Function
     function goBack() {
       mainSection.style.display = "flex";
-      document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+      pages.forEach(p => p.style.display = "none");
       document.body.classList.remove("no-scroll");
       searchError.style.display = "none";
       formError.style.display = "none";
@@ -359,8 +366,8 @@
         formError.style.display = "block";
         return;
       }
-      if (!/^[0-9]{12}$/.test(accountNumber)) {
-        formError.textContent = "Account number must be 12 digits!";
+      if (!/^[0-9]{16}$/.test(accountNumber)) {
+        formError.textContent = "Account number must be 16 digits!";
         formError.style.display = "block";
         return;
       }
@@ -420,6 +427,12 @@
       searchError.style.color = "blue";
       searchError.style.display = "block";
     }
+
+    // Log load time
+    window.addEventListener('load', () => {
+      const loadTime = performance.now() - startTime;
+      console.log("Page load time:", loadTime, "ms");
+    });
   </script>
 </body>
 </html>
