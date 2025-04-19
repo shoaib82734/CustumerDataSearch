@@ -186,6 +186,11 @@
     <h1>Welcome to PNB Mini Branch</h1>
     <button onclick="showPage('addCustomer')">Add Customer</button>
     <button onclick="showPage('aboutUs')">About Us</button>
+
+    <!-- Search Bar -->
+    <div class="form-group">
+      <input type="text" id="searchBar" placeholder="Search for a customer" oninput="searchCustomer()">
+    </div>
   </div>
 
   <!-- Add Customer Page -->
@@ -287,37 +292,37 @@
       }
 
       if (valid) {
-        // Save customer data (can be linked to Google Sheets here)
         alert("Customer added successfully!");
         goBack();
       }
     }
 
-    // Function to show error messages
-    function showError(elementId, message) {
-      document.getElementById(elementId).textContent = message;
+    // Show Error Messages
+    function showError(id, message) {
+      document.getElementById(id).textContent = message;
     }
 
-    // Function to clear error messages
+    // Clear Error Messages
     function clearErrors() {
-      document.querySelectorAll(".error-message").forEach(e => e.textContent = "");
+      const errorMessages = document.querySelectorAll(".error-message");
+      errorMessages.forEach(error => error.textContent = "");
     }
 
-    // Toggle Menu Visibility
+    // Toggle Menu
     function toggleMenu() {
       const menu = document.getElementById("menuDropdown");
-      menu.style.display = menu.style.display === "none" ? "flex" : "none";
+      menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
     }
 
-    // Close menu when clicking outside
-    document.addEventListener("click", function(event) {
-      const menu = document.getElementById("menuDropdown");
-      const menuTrigger = document.querySelector(".menu-trigger");
-
-      if (!menu.contains(event.target) && !menuTrigger.contains(event.target)) {
-        menu.style.display = "none";
-      }
-    });
+    // Search Customer
+    function searchCustomer() {
+      const searchQuery = document.getElementById("searchBar").value.toLowerCase();
+      const customerData = [
+        // Add your customer data here
+      ];
+      const results = customerData.filter(customer => customer.name.toLowerCase().includes(searchQuery));
+      console.log(results); // Update with how you want to display the results
+    }
   </script>
 </body>
 </html>
