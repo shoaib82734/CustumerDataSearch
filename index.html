@@ -15,9 +15,9 @@
       padding: 0;
       height: 100vh;
       font-family: 'Poppins', 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
+      background: var(--pnb-burgundy);
       box-sizing: border-box;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     :root {
@@ -42,7 +42,6 @@
       left: 0;
       right: 0;
       background: linear-gradient(135deg, rgba(248, 248, 248, 0.9) 0%, rgba(251, 188, 9, 0.9) 100%);
-      backdrop-filter: blur(5px);
       padding: var(--spacing-xs);
       display: flex;
       justify-content: center;
@@ -71,21 +70,16 @@
 
     /* Center Main Content */
     .main {
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
-      max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
+      height: calc(100vh - var(--navbar-height) - var(--footer-height));
       text-align: center;
       padding: var(--spacing-xs);
-      background: linear-gradient(135deg, var(--pnb-burgundy) 0%, var(--pnb-yellow) 100%);
+      background: var(--pnb-burgundy);
       color: white;
       overflow: hidden;
-    }
-
-    .main.loaded {
-      display: flex;
     }
 
     .main h1 {
@@ -246,11 +240,6 @@
       z-index: 1000;
     }
 
-    footer p {
-      margin: 0.1rem 0;
-      line-height: 1.2;
-    }
-
     .page footer {
       position: relative;
       z-index: 1;
@@ -277,9 +266,8 @@
         font-size: var(--font-size-base);
       }
       .main {
+        height: calc(100vh - var(--navbar-height) - var(--footer-height));
         padding: 0.3rem;
-        min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
-        max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       }
       .form-group {
         max-width: 100%;
@@ -399,21 +387,16 @@
 
     // Show Page Function
     function showPage(pageId) {
-      mainSection.classList.remove("loaded");
+      mainSection.style.display = "none";
       pages.forEach(p => p.style.display = "none");
       document.getElementById(pageId).style.display = "block";
-      setTimeout(() => mainSection.classList.add("loaded"), 0); // Ensure layout stabilizes
     }
 
     // Go Back Function
     function goBack() {
       pages.forEach(p => p.style.display = "none");
-      mainSection.style.display = "none"; // Hide first to reset
-      setTimeout(() => {
-        mainSection.classList.add("loaded");
-        mainSection.style.display = "flex"; // Show with loaded class
-        window.scrollTo(0, 0); // Reset scroll position
-      }, 0);
+      mainSection.style.display = "flex";
+      window.scrollTo(0, 0); // Reset scroll
     }
 
     // Add Customer Function (Placeholder)
@@ -427,11 +410,10 @@
       alert("Searching customer...");
     }
 
-    // Apply loaded class after page load
+    // Ensure layout on load
     window.addEventListener("load", () => {
-      setTimeout(() => {
-        mainSection.classList.add("loaded");
-      }, 100); // Small delay to ensure styles are applied
+      mainSection.style.display = "flex";
+      window.scrollTo(0, 0);
     });
   </script>
 </body>
