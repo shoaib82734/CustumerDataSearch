@@ -25,8 +25,9 @@
       --pnb-burgundy: #8B0029;
       --spacing-xs: 0.3rem;
       --spacing-sm: 0.5rem;
-      --font-size-lg: clamp(1.4rem, 3.5vw, 1.6rem);
-      --font-size-base: clamp(0.8rem, 2vw, 0.9rem);
+      --spacing-md: 1rem; /* Added for spacing below header */
+      --font-size-lg: clamp(1.8rem, 4vw, 2.2rem);
+      --font-size-base: clamp(1rem, 2.5vw, 1.2rem);
       --navbar-height: 60px;
       --footer-height: 70px;
     }
@@ -65,7 +66,7 @@
     }
 
     .navbar button:hover {
-      background: linear-gradient(135deg, #A20E37, #6B001F);
+      background: #6B001F;
     }
 
     /* Center Main Content */
@@ -118,7 +119,7 @@
 
     button {
       padding: 0.3rem 0.8rem;
-      background: var(--pnb-burgundy);
+      background: var(--pnb-yellow);
       color: white;
       border: none;
       border-radius: 6px;
@@ -131,7 +132,7 @@
     }
 
     button:hover {
-      background: linear-gradient(135deg, #A20E37, #6B001F);
+      background: #E6A700;
     }
 
     /* Hide Pages Initially */
@@ -157,6 +158,7 @@
       width: 100%;
       padding: var(--spacing-sm);
       text-align: center;
+      background: var(--pnb-burgundy);
     }
 
     .form-container {
@@ -172,21 +174,47 @@
     }
 
     #addCustomer h2 {
-      font-size: var(--font-size-md);
+      font-size: var(--font-size-lg);
       font-weight: 600;
       margin-bottom: var(--spacing-sm);
-      color: #333;
+      color: white;
+    }
+
+    #addCustomer table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--spacing-sm) auto;
+    }
+
+    #addCustomer th, #addCustomer td {
+      padding: var(--spacing-xs);
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    #addCustomer th {
+      background-color: var(--pnb-burgundy);
+      color: white;
+    }
+
+    #addCustomer td input {
+      width: 100%;
+      padding: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: var(--font-size-base);
     }
 
     /* About Us Page */
     #aboutUs {
       min-height: 100vh;
-      padding: var(--spacing-md);
+      padding: var(--spacing-md) var(--spacing-md) var(--spacing-md); /* Added top padding */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
+      background: var(--pnb-burgundy);
     }
 
     .content-container {
@@ -200,7 +228,7 @@
     }
 
     #aboutUs h2 {
-      font-size: var(--font-size-md);
+      font-size: var(--font-size-lg);
       font-weight: 600;
       margin-bottom: var(--spacing-sm);
       color: #333;
@@ -208,9 +236,10 @@
 
     #aboutUs p {
       font-size: var(--font-size-base);
-      line-height: 1.4;
+      line-height: 1.5;
       margin: var(--spacing-sm) 0;
       color: #333;
+      text-align: center;
     }
 
     #aboutUs p strong {
@@ -250,8 +279,8 @@
       :root {
         --navbar-height: 160px;
         --footer-height: 90px;
-        --font-size-lg: clamp(1.2rem, 3vw, 1.4rem);
-        --font-size-base: clamp(0.75rem, 1.8vw, 0.85rem);
+        --font-size-lg: clamp(1.5rem, 4vw, 1.8rem);
+        --font-size-base: clamp(0.9rem, 2.5vw, 1.1rem);
       }
       .navbar {
         flex-direction: column;
@@ -293,6 +322,12 @@
         padding: 0.3rem;
         max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       }
+      #addCustomer table {
+        font-size: var(--font-size-base);
+      }
+      #aboutUs {
+        padding-top: calc(var(--spacing-md) + 1rem); /* Increased padding for mobile */
+      }
     }
 
     @media (min-width: 601px) {
@@ -325,32 +360,40 @@
 
   <!-- Add Customer Page -->
   <div class="page" id="addCustomer" role="region" aria-label="Add customer form">
+    <h2>Add New Customer</h2>
     <div class="form-container">
-      <h2>Add New Customer</h2>
-      <form id="customerForm">
-        <div class="form-group">
-          <label for="name">Customer Name</label>
-          <input type="text" id="name" placeholder="Customer Name" aria-required="true">
-        </div>
-        <div class="form-group">
-          <label for="mobile">Mobile Number</label>
-          <input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true">
-        </div>
-        <div class="form-group">
-          <label for="accountNumber">Account Number</label>
-          <input type="text" id="accountNumber" placeholder="16-digit Account Number" pattern="[0-9]{16}" aria-required="true">
-        </div>
-        <div class="form-group">
-          <label for="customerId">Customer ID</label>
-          <input type="text" id="customerId" placeholder="e.g., A12345678" pattern="[A-Z][0-9]{8}" aria-required="true">
-        </div>
-        <div class="form-group">
-          <label for="address">Address</label>
-          <input type="text" id="address" placeholder="Address" aria-required="true">
-        </div>
-        <button type="button" onclick="addCustomer()">Add Customer</button>
-        <button type="button" onclick="goBack()">Back to Home</button>
-      </form>
+      <table>
+        <tr>
+          <th>Field</th>
+          <th>Input</th>
+        </tr>
+        <tr>
+          <td>Customer Name</td>
+          <td><input type="text" placeholder="Customer Name" aria-required="true"></td>
+        </tr>
+        <tr>
+          <td>Mobile Number</td>
+          <td><input type="tel" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true"></td>
+        </tr>
+        <tr>
+          <td>Account Number</td>
+          <td><input type="text" placeholder="16-digit Account Number" pattern="[0-9]{16}" aria-required="true"></td>
+        </tr>
+        <tr>
+          <td>Customer ID</td>
+          <td><input type="text" placeholder="e.g., A12345678" pattern="[A-Z][0-9]{8}" aria-required="true"></td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td><input type="text" placeholder="Address" aria-required="true"></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align: center;">
+            <button type="button" onclick="addCustomer()">Add Customer</button>
+            <button type="button" onclick="goBack()">Back to Home</button>
+          </td>
+        </tr>
+      </table>
     </div>
     <footer>
       <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: cscshoaib123@gmail.com</p>
@@ -396,7 +439,7 @@
     function goBack() {
       pages.forEach(p => p.style.display = "none");
       mainSection.style.display = "flex";
-      window.scrollTo(0, 0); // Reset scroll
+      window.scrollTo(0, 0);
     }
 
     // Add Customer Function (Placeholder)
