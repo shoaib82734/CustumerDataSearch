@@ -9,6 +9,7 @@
   <title>PNB Mini Branch</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <style>
     body, html {
       margin: 0;
@@ -34,6 +35,52 @@
 
     *, *:before, *:after {
       box-sizing: inherit;
+    }
+
+    /* Password Screen */
+    #passwordScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      background: var(--pnb-burgundy);
+      color: white;
+    }
+
+    #passwordScreen h1 {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--spacing-md);
+    }
+
+    #passwordScreen .form-group {
+      width: 100%;
+      max-width: 300px;
+      margin: var(--spacing-sm) 0;
+    }
+
+    #passwordScreen input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: var(--font-size-base);
+    }
+
+    #passwordScreen button {
+      padding: 0.5rem 1rem;
+      background: var(--pnb-yellow);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: var(--font-size-base);
+      margin-top: var(--spacing-sm);
+    }
+
+    #passwordScreen button:hover {
+      background: #E6A700;
     }
 
     /* Navigation Bar */
@@ -71,7 +118,7 @@
 
     /* Center Main Content */
     .main {
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -220,7 +267,7 @@
     #searchResults table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: var(--spacing-sm);
+      margin-top: var(--spacing-md);
     }
 
     #searchResults th, #searchResults td {
@@ -377,6 +424,16 @@
   </style>
 </head>
 <body>
+  <!-- Password Screen -->
+  <div id="passwordScreen">
+    <h1>PNB Mini Branch</h1>
+    <div class="form-group">
+      <label for="password">Enter Password</label>
+      <input type="password" id="password" placeholder="Password" aria-required="true">
+    </div>
+    <button onclick="checkPassword()">Submit</button>
+  </div>
+
   <!-- Navigation Bar -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <button onclick="goBack()">Home</button>
@@ -480,6 +537,7 @@
 
   <script>
     // Cached DOM Elements
+    const passwordScreen = document.getElementById("passwordScreen");
     const mainSection = document.getElementById("mainSection");
     const pages = document.querySelectorAll(".page");
     const nameInput = document.getElementById("name");
@@ -491,15 +549,26 @@
     const searchInput = document.getElementById("search");
     const searchResults = document.getElementById("searchResults");
     const searchResultsBody = document.getElementById("searchResultsBody");
+    const passwordInput = document.getElementById("password");
 
-    // Google Apps Script URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwX75DYp_URcno89Kf0GoD7OKw6Bl2yZPw7xuGfqQj9vH-SWGDzzHcz47oABXtmirI/exec";
+    // Define the correct password hash (stored in localStorage or default)
+    let CORRECT_PASSWORD_HASH = localStorage.getItem("pnbPasswordHash") || CryptoJS.SHA256("yourpassword123").toString();
 
-    // Mobile Number Validation Function
-    function validateMobileNumber(input) {
-      input.value = input.value.replace(/\D/g, '');
-      if (input.value.length > 10) {
-        input.value = input.value.slice(0, 10);
+    // Encrypt password
+    function hashPassword(password) {
+      return CryptoJS.SHA256(password).toString();
+    }
+
+    // Password Check Function
+    function checkPassword() {
+      const enteredPassword = passwordInput.value.trim();
+      const enteredPasswordHash = hashPassword(enteredPassword);
+      if (enteredPasswordHash === CORRECT_PASSWORD_HASH) {
+        passwordScreen.style.display = "none";
+        mainSection.style.display = "flex";
+      } else {
+        alert("Incorrect password. Please try again.");
+        passwordInput.value = "";
       }
     }
 
@@ -541,9 +610,7 @@
             alert(`Error from Google Apps Script: ${data.error}\n1. Check Google Sheet ID in Apps Script.\n2. Ensure Apps Script is deployed with 'Anyone' access.\n3. Verify Sheet name is exactly 'Customers'.`);
             console.error("Apps Script Error:", data.error);
           } else if (data.results && data.results.length > 0) {
-            // Clear previous results
             searchResultsBody.innerHTML = "";
-            // Populate table with results
             data.results.forEach(customer => {
               const row = document.createElement("tr");
               row.innerHTML = `
@@ -557,7 +624,7 @@
               searchResultsBody.appendChild(row);
             });
             searchResults.style.display = "block";
-            mainSection.style.display = "flex"; // Keep main section visible
+            mainSection.style.display = "flex";
           } else {
             searchResultsBody.innerHTML = "<tr><td colspan='6'>No customers found.</td></tr>";
             searchResults.style.display = "block";
@@ -642,8 +709,8 @@
 
     // Ensure layout on load
     window.addEventListener("load", () => {
-      mainSection.style.display = "flex";
-      window.scrollTo(0, 0);
+      passwordScreen.style.display = "flex";
+      mainSection.style.display = "none";
     });
   </script>
 </body>
