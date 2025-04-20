@@ -311,7 +311,7 @@
       font-size: var(--font-size-lg);
       font-weight: 600;
       margin-bottom: var(--spacing-sm);
-      color: #333
+      color: #333;
     }
 
     #aboutUs p {
@@ -453,13 +453,13 @@
       <table>
         <thead>
           <tr>
+            <th>Timestamp</th>
             <th>Name</th>
             <th>Father's Name</th>
             <th>Mobile</th>
             <th>Account Number</th>
             <th>Customer ID</th>
             <th>Aadhaar</th>
-            <th>Address</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -502,10 +502,6 @@
           <td><input type="text" id="aadhaar" placeholder="12-digit Aadhaar Number" maxlength="12" aria-required="true"></td>
         </tr>
         <tr>
-          <td>Address</td>
-          <td><input type="text" id="address" placeholder="Address" aria-required="true"></td>
-        </tr>
-        <tr>
           <td colspan="2" style="text-align: center;">
             <button type="button" id="submitButton" onclick="addCustomer()">Add Customer</button>
             <button type="button" onclick="goBack()">Back to Home</button>
@@ -542,8 +538,8 @@
   </footer>
 
   <script>
-    // Define SCRIPT_URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwX75DYp_URcno89Kf0GoD7OKw6Bl2yZPw7xuGfqQj9vH-SWGDzzHcz47oABXtmirI/exec";
+    // Define SCRIPT_URL (Replace with your deployed Apps Script URL)
+    const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYED_URL/exec";
 
     // Cached DOM Elements
     const passwordScreen = document.getElementById("passwordScreen");
@@ -555,7 +551,6 @@
     const accountNumberInput = document.getElementById("accountNumber");
     const customerIdInput = document.getElementById("customerId");
     const aadhaarInput = document.getElementById("aadhaar");
-    const addressInput = document.getElementById("address");
     const searchInput = document.getElementById("search");
     const searchResults = document.getElementById("searchResults");
     const searchResultsBody = document.getElementById("searchResultsBody");
@@ -609,7 +604,6 @@
       accountNumberInput.value = "";
       customerIdInput.value = "";
       aadhaarInput.value = "";
-      addressInput.value = "";
       addCustomerTitle.textContent = "Add New Customer";
       submitButton.textContent = "Add Customer";
       submitButton.onclick = addCustomer;
@@ -624,7 +618,7 @@
       }
 
       try {
-        const response = await fetch(`https://cors-anywhere.herokuapp.com/${SCRIPT_URL}?action=search&query=${encodeURIComponent(searchValue)}`, {
+        const response = await fetch(`${SCRIPT_URL}?action=search&query=${encodeURIComponent(searchValue)}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
@@ -642,13 +636,13 @@
             data.results.forEach(customer => {
               const row = document.createElement("tr");
               row.innerHTML = `
+                <td>${new Date(customer.timestamp).toLocaleString() || ''}</td>
                 <td>${customer.name || ''}</td>
                 <td>${customer.fatherName || ''}</td>
                 <td>${customer.mobile || ''}</td>
                 <td>${customer.accountNumber || ''}</td>
                 <td>${customer.customerId || ''}</td>
                 <td>${customer.aadhaar || ''}</td>
-                <td>${customer.address || ''}</td>
                 <td><button onclick='editCustomer(${JSON.stringify(customer)})'>Edit</button></td>
               `;
               searchResultsBody.appendChild(row);
@@ -671,14 +665,13 @@
 
     // Edit Customer Function
     function editCustomer(customer) {
-      // Populate form with customer data
+      // Populate form with customer data (exclude timestamp as it's auto-generated)
       nameInput.value = customer.name || '';
       fatherNameInput.value = customer.fatherName || '';
       mobileInput.value = customer.mobile || '';
       accountNumberInput.value = customer.accountNumber || '';
       customerIdInput.value = customer.customerId || '';
       aadhaarInput.value = customer.aadhaar || '';
-      addressInput.value = customer.address || '';
       
       // Change form title and button for editing
       addCustomerTitle.textContent = "Edit Customer";
@@ -697,7 +690,6 @@
       const accountNumber = accountNumberInput.value.trim();
       const customerId = customerIdInput.value.trim();
       const aadhaar = aadhaarInput.value.trim();
-      const address = addressInput.value.trim();
 
       // Validation
       if (!name || !/^[A-Za-z\s]+$/.test(name)) {
@@ -724,10 +716,6 @@
         alert("Aadhaar number must be exactly 12 digits.");
         return;
       }
-      if (!address) {
-        alert("Address is required.");
-        return;
-      }
 
       const customerData = {
         action: "update",
@@ -737,8 +725,7 @@
         mobile,
         accountNumber,
         customerId,
-        aadhaar,
-        address
+        aadhaar
       };
 
       try {
@@ -768,7 +755,6 @@
       const accountNumber = accountNumberInput.value.trim();
       const customerId = customerIdInput.value.trim();
       const aadhaar = aadhaarInput.value.trim();
-      const address = addressInput.value.trim();
 
       if (!name || !/^[A-Za-z\s]+$/.test(name)) {
         alert("Name must contain only letters and spaces.");
@@ -794,10 +780,6 @@
         alert("Aadhaar number must be exactly 12 digits.");
         return;
       }
-      if (!address) {
-        alert("Address is required.");
-        return;
-      }
 
       const customerData = {
         action: "add",
@@ -806,8 +788,7 @@
         mobile,
         accountNumber,
         customerId,
-        aadhaar,
-        address
+        aadhaar
       };
 
       try {
