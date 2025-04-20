@@ -442,7 +442,7 @@
     const addressInput = document.getElementById("address");
     const searchInput = document.getElementById("search");
 
-    // Google Apps Script URL (Updated)
+    // Google Apps Script URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwN9yxEdtYI5-6-csuiDZ51TwG3qztCGv4-a7fdhKADLTP_ECADwRrzVEo9QFHUwzY/exec";
 
     // Mobile Number Validation Function
@@ -483,17 +483,24 @@
             "Content-Type": "application/json"
           }
         });
-        const data = await response.json();
-        if (data.error) {
-          alert(`Error from Google Apps Script: ${data.error}\n1. Check if Google Sheet ID is correct in Apps Script.\n2. Ensure Apps Script is deployed with 'Anyone' access.\n3. Verify Sheet name is 'Customers'.`);
-          console.error("Apps Script Error:", data.error);
-        } else if (data.results && data.results.length > 0) {
-          const results = data.results.map(customer => 
-            `Name: ${customer.name}, Mobile: ${customer.mobile}, Aadhaar: ${customer.aadhaar}, Account: ${customer.accountNumber}, Customer ID: ${customer.customerId}, Address: ${customer.address}`
-          ).join('\n');
-          alert(`Found customers:\n${results}`);
-        } else {
-          alert("No customers found.");
+        const text = await response.text(); // Get raw response for debugging
+        console.log("Raw Search Response:", text); // Log raw response
+        try {
+          const data = JSON.parse(text); // Try parsing as JSON
+          if (data.error) {
+            alert(`Error from Google Apps Script: ${data.error}\n1. Check Google Sheet ID in Apps Script.\n2. Ensure Apps Script is deployed with 'Anyone' access.\n3. Verify Sheet name is exactly 'Customers'.`);
+            console.error("Apps Script Error:", data.error);
+          } else if (data.results && data.results.length > 0) {
+            const results = data.results.map(customer => 
+              `Name: ${customer.name}, Mobile: ${customer.mobile}, Aadhaar: ${customer.aadhaar}, Account: ${customer.accountNumber}, Customer ID: ${customer.customerId}, Address: ${customer.address}`
+            ).join('\n');
+            alert(`Found customers:\n${results}`);
+          } else {
+            alert("No customers found.");
+          }
+        } catch (jsonError) {
+          alert(`Invalid JSON response: ${jsonError.message}\nRaw response: ${text}\n1. Ensure cors-anywhere is active (visit https://cors-anywhere.herokuapp.com/ and request access).\n2. Or use 'Allow CORS: Access-Control-Allow-Origin' Chrome extension.\n3. Check Apps Script for errors.`);
+          console.error("JSON Parse Error:", jsonError, "Raw Response:", text);
         }
       } catch (error) {
         alert("Error searching customer: " + error.message + "\n1. Visit https://cors-anywhere.herokuapp.com/ and request temporary access.\n2. Or install 'Allow CORS: Access-Control-Allow-Origin' Chrome extension and enable it.\n3. Open Developer Tools (F12, Console tab) for detailed errors.");
@@ -568,8 +575,8 @@
         // Return to Home
         goBack();
       } catch (error) {
-        alert("Error adding customer: " + error.message + "\n1. Check if Google Apps Script URL is correct.\n2. Verify Sheet ID in Apps Script.\n3. Ensure Apps Script is deployed with 'Anyone' access.\n4. Open Developer Tools (F12, Console tab) for details.");
-        console.error("Add Customer Error:", error);
+        alert("Error adding customer: " + error.message + "\n1. Check Google Apps Script URL.\n2. Verify Sheet ID in Apps Script.\n3. Ensure Apps Script is deployed with 'Anyone' access.\n4. Open Developer Tools (F12, Console tab) for details.");
+        console.error("Add Customer Error:", error, "Data Attempted:", customerData);
       }
     }
 
