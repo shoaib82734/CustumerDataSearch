@@ -25,7 +25,7 @@
       --pnb-burgundy: #8B0029;
       --spacing-xs: 0.3rem;
       --spacing-sm: 0.5rem;
-      --spacing-md: 1rem; /* Added for spacing below header */
+      --spacing-md: 1rem;
       --font-size-lg: clamp(1.8rem, 4vw, 2.2rem);
       --font-size-base: clamp(1rem, 2.5vw, 1.2rem);
       --navbar-height: 60px;
@@ -156,7 +156,7 @@
       justify-content: center;
       min-height: 100vh;
       width: 100%;
-      padding: var(--spacing-sm);
+      padding: var(--spacing-md) var(--spacing-sm) var(--spacing-sm);
       text-align: center;
       background: var(--pnb-burgundy);
     }
@@ -208,7 +208,7 @@
     /* About Us Page */
     #aboutUs {
       min-height: 100vh;
-      padding: var(--spacing-md) var(--spacing-md) var(--spacing-md); /* Added top padding */
+      padding: var(--spacing-md) var(--spacing-md) var(--spacing-md);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -322,11 +322,14 @@
         padding: 0.3rem;
         max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       }
-      #addCustomer table {
-        font-size: var(--font-size-base);
+      #addCustomer {
+        padding-top: calc(var(--spacing-md) + 1rem);
       }
       #aboutUs {
-        padding-top: calc(var(--spacing-md) + 1rem); /* Increased padding for mobile */
+        padding-top: calc(var(--spacing-md) + 1rem);
+      }
+      #addCustomer table {
+        font-size: var(--font-size-base);
       }
     }
 
@@ -352,8 +355,8 @@
   <div class="main" id="mainSection" role="main" aria-label="Main content">
     <h1>Welcome to PNB Mini Branch</h1>
     <div class="form-group">
-      <label for="search">Search Customer</label>
-      <input type="text" id="search" placeholder="Enter Name, Mobile, Account, etc." aria-required="true">
+      <label for="search">Search Customer (Name/Mobile/Aadhaar)</label>
+      <input type="text" id="search" placeholder="Enter Name, Mobile, or Aadhaar" aria-required="true">
     </div>
     <button onclick="searchCustomer()">Search</button>
   </div>
@@ -369,23 +372,27 @@
         </tr>
         <tr>
           <td>Customer Name</td>
-          <td><input type="text" placeholder="Customer Name" aria-required="true"></td>
+          <td><input type="text" id="name" placeholder="Customer Name" aria-required="true"></td>
         </tr>
         <tr>
           <td>Mobile Number</td>
-          <td><input type="tel" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true"></td>
+          <td><input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true"></td>
         </tr>
         <tr>
           <td>Account Number</td>
-          <td><input type="text" placeholder="16-digit Account Number" pattern="[0-9]{16}" aria-required="true"></td>
+          <td><input type="text" id="accountNumber" placeholder="16-digit Account Number" maxlength="16" aria-required="true"></td>
         </tr>
         <tr>
           <td>Customer ID</td>
-          <td><input type="text" placeholder="e.g., A12345678" pattern="[A-Z][0-9]{8}" aria-required="true"></td>
+          <td><input type="text" id="customerId" placeholder="e.g., A12345678" maxlength="9" aria-required="true"></td>
+        </tr>
+        <tr>
+          <td>Aadhaar Number</td>
+          <td><input type="text" id="aadhaar" placeholder="12-digit Aadhaar Number" maxlength="12" aria-required="true"></td>
         </tr>
         <tr>
           <td>Address</td>
-          <td><input type="text" placeholder="Address" aria-required="true"></td>
+          <td><input type="text" id="address" placeholder="Address" aria-required="true"></td>
         </tr>
         <tr>
           <td colspan="2" style="text-align: center;">
@@ -427,6 +434,12 @@
     // Cached DOM Elements
     const mainSection = document.getElementById("mainSection");
     const pages = document.querySelectorAll(".page");
+    const nameInput = document.getElementById("name");
+    const mobileInput = document.getElementById("mobile");
+    const accountNumberInput = document.getElementById("accountNumber");
+    const customerIdInput = document.getElementById("customerId");
+    const aadhaarInput = document.getElementById("aadhaar");
+    const addressInput = document.getElementById("address");
 
     // Show Page Function
     function showPage(pageId) {
@@ -442,15 +455,62 @@
       window.scrollTo(0, 0);
     }
 
-    // Add Customer Function (Placeholder)
-    function addCustomer() {
-      alert("Customer added successfully!");
-      goBack();
+    // Search Customer Function
+    function searchCustomer() {
+      const searchValue = document.getElementById("search").value.trim();
+      if (searchValue) {
+        alert(`Searching for: ${searchValue} (Name/Mobile/Aadhaar)`);
+      } else {
+        alert("Please enter a search term (Name, Mobile, or Aadhaar).");
+      }
     }
 
-    // Search Customer Function (Placeholder)
-    function searchCustomer() {
-      alert("Searching customer...");
+    // Add Customer Function with Validation and Fix
+    function addCustomer() {
+      const name = nameInput.value.trim();
+      const mobile = mobileInput.value.trim();
+      const accountNumber = accountNumberInput.value.trim();
+      const customerId = customerIdInput.value.trim();
+      const aadhaar = aadhaarInput.value.trim();
+      const address = addressInput.value.trim();
+
+      // Validation
+      if (!name || !/^[A-Za-z\s]+$/.test(name)) {
+        alert("Name must contain only letters and spaces.");
+        return;
+      }
+      if (!mobile || !/^\d{10}$/.test(mobile)) {
+        alert("Mobile number must be exactly 10 digits.");
+        return;
+      }
+      if (!accountNumber || !/^\d{16}$/.test(accountNumber)) {
+        alert("Account number must be exactly 16 digits.");
+        return;
+      }
+      if (!customerId || !/^[A-Za-z][0-9]{8}$/.test(customerId)) {
+        alert("Customer ID must be 9 characters, starting with a letter followed by 8 digits (e.g., A12345678).");
+        return;
+      }
+      if (!aadhaar || !/^\d{12}$/.test(aadhaar)) {
+        alert("Aadhaar number must be exactly 12 digits.");
+        return;
+      }
+      if (!address) {
+        alert("Address is required.");
+        return;
+      }
+
+      // Success
+      alert("Customer added successfully!");
+      // Clear form
+      nameInput.value = "";
+      mobileInput.value = "";
+      accountNumberInput.value = "";
+      customerIdInput.value = "";
+      aadhaarInput.value = "";
+      addressInput.value = "";
+      // Return to Home
+      goBack();
     }
 
     // Ensure layout on load
