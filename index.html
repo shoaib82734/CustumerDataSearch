@@ -13,7 +13,7 @@
     body, html {
       margin: 0;
       padding: 0;
-      height: 100vh;
+      min-height: 100vh;
       font-family: 'Poppins', 'Arial', sans-serif;
       background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
       box-sizing: border-box;
@@ -26,10 +26,11 @@
       --spacing-sm: 0.5rem;
       --spacing-md: 1rem;
       --spacing-lg: 1.5rem;
-      --font-size-lg: clamp(1.8rem, 5vw, 2.2rem);
-      --font-size-md: clamp(1.4rem, 4vw, 1.6rem);
-      --font-size-base: clamp(0.9rem, 3vw, 1rem);
-      --navbar-height: 60px; /* Fixed navbar height */
+      --font-size-lg: clamp(1.6rem, 4vw, 1.8rem);
+      --font-size-md: clamp(1.2rem, 3vw, 1.4rem);
+      --font-size-base: clamp(0.85rem, 2.5vw, 0.95rem);
+      --navbar-height: 60px;
+      --footer-height: 60px;
     }
 
     *, *:before, *:after {
@@ -76,23 +77,55 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: calc(100vh - var(--navbar-height));
+      min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       text-align: center;
-      padding: var(--spacing-md);
+      padding: var(--spacing-sm);
+      margin-top: var(--navbar-height);
+      margin-bottom: var(--footer-height);
       background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, var(--pnb-burgundy) 0%, var(--pnb-yellow) 100%);
       color: white;
-      overflow: hidden;
     }
 
     .main h1, .main label {
       color: white;
+      margin: 0.3rem 0;
+    }
+
+    .form-group {
+      width: 100%;
+      max-width: 400px;
+      margin: 0.3rem auto;
+    }
+
+    .form-group label {
+      font-size: var(--font-size-base);
+      color: white;
+      line-height: 1.4;
+      display: block;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.4rem;
+      margin: 0.3rem 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: var(--font-size-base);
+      line-height: 1.4;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--pnb-burgundy);
+      outline: none;
     }
 
     /* Hide Pages Initially */
     .page {
       display: none;
       padding: var(--spacing-md);
-      min-height: 100vh;
+      min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
+      margin-top: var(--navbar-height);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -107,7 +140,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       width: 100%;
       padding: var(--spacing-sm);
       text-align: center;
@@ -116,26 +149,13 @@
     .form-container {
       max-width: 90%;
       width: 100%;
-      max-height: calc(100vh - 120px);
+      max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       margin: 0 auto;
       background: white;
       padding: var(--spacing-md);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       overflow-y: auto;
-    }
-
-    .form-group {
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto var(--spacing-sm);
-    }
-
-    .form-group label {
-      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-      color: #333;
-      line-height: 1.4;
-      display: block;
     }
 
     #addCustomer h2 {
@@ -146,14 +166,14 @@
     }
 
     button {
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 1rem;
       background: var(--pnb-burgundy);
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       font-size: var(--font-size-base);
-      margin: var(--spacing-sm);
+      margin: 0.3rem;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: background 0.3s;
       min-width: 100px;
@@ -163,34 +183,18 @@
       background: linear-gradient(135deg, #A20E37, #6B001F);
     }
 
-    .form-group input {
-      width: 100%;
-      padding: 0.5rem;
-      margin: var(--spacing-sm) 0;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: var(--font-size-base);
-      line-height: 1.4;
-      transition: border-color 0.3s;
-    }
-
-    .form-group input:focus {
-      border-color: var(--pnb-burgundy);
-      outline: none;
-    }
-
     /* Error Message */
     .error-message {
       color: #D32F2F;
-      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-      margin: var(--spacing-sm) 0;
+      font-size: var(--font-size-base);
+      margin: 0.3rem 0;
       display: none;
       text-align: center;
     }
 
     /* About Us Page */
     #aboutUs {
-      min-height: 100vh;
+      min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       padding: var(--spacing-md);
       display: flex;
       flex-direction: column;
@@ -245,7 +249,7 @@
       width: 24px;
       height: 24px;
       animation: spin 1s linear infinite;
-      margin: var(--spacing-sm) auto;
+      margin: 0.3rem auto;
     }
 
     @keyframes spin {
@@ -255,11 +259,25 @@
 
     /* Footer */
     footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
       background: var(--pnb-burgundy);
       color: white;
       text-align: center;
-      padding: var(--spacing-md);
+      padding: var(--spacing-sm);
       font-size: var(--font-size-base);
+      height: var(--footer-height);
+      z-index: 100;
+    }
+
+    footer p {
+      margin: 0.2rem 0;
+    }
+
+    .page footer {
+      position: relative;
+      margin-top: auto;
     }
 
     /* Prevent Scrolling on Form Page Only */
@@ -270,12 +288,14 @@
     /* Responsive Design */
     @media (max-width: 600px) {
       :root {
-        --navbar-height: 120px; /* Adjusted for vertical buttons */
+        --navbar-height: 150px;
+        --footer-height: 80px;
       }
       .navbar {
         flex-direction: column;
         align-items: center;
         padding: 0.5rem;
+        height: var(--navbar-height);
       }
       .navbar button {
         width: 80%;
@@ -285,12 +305,7 @@
       }
       .main {
         padding: 0.5rem;
-        height: calc(100vh - var(--navbar-height));
-      }
-      .form-container, .content-container {
-        max-width: 95%;
-        padding: 0.5rem;
-        max-height: calc(100vh - 150px);
+        min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       }
       .form-group {
         max-width: 100%;
@@ -307,7 +322,7 @@
         padding: 0.4rem 0.8rem;
       }
       h1 {
-        font-size: clamp(1.6rem, 5vw, 1.8rem);
+        font-size: clamp(1.4rem, 4vw, 1.6rem);
       }
       h2 {
         font-size: clamp(1.2rem, 4vw, 1.4rem);
@@ -318,6 +333,12 @@
       footer {
         font-size: clamp(0.75rem, 2vw, 0.85rem);
         padding: 0.5rem;
+        height: var(--footer-height);
+      }
+      .form-container, .content-container {
+        max-width: 95%;
+        padding: 0.5rem;
+        max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       }
     }
 
@@ -382,6 +403,10 @@
         <button type="button" onclick="goBack()">Back to Home</button>
       </form>
     </div>
+    <footer>
+      <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: cscshoaib123@gmail.com</p>
+      <p>© 2025 PNB Mini Branch. All rights reserved.</p>
+    </footer>
   </div>
 
   <!-- About Us Page -->
@@ -394,9 +419,13 @@
       <p><strong>About:</strong> I manage a CSC Center and PNB Mini Branch, offering reliable banking services, including account opening, money transfers, and customer support. Committed to providing efficient and trustworthy solutions to meet your financial needs.</p>
       <button onclick="goBack()">Back to Home</button>
     </div>
+    <footer>
+      <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: cscshoaib123@gmail.com</p>
+      <p>© 2025 PNB Mini Branch. All rights reserved.</p>
+    </footer>
   </div>
 
-  <!-- Footer -->
+  <!-- Footer for Home Page -->
   <footer>
     <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: cscshoaib123@gmail.com</p>
     <p>© 2025 PNB Mini Branch. All rights reserved.</p>
