@@ -440,13 +440,14 @@
     const customerIdInput = document.getElementById("customerId");
     const aadhaarInput = document.getElementById("aadhaar");
     const addressInput = document.getElementById("address");
+    const searchInput = document.getElementById("search");
+
+    // Google Apps Script URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9xvzoXYm_v5zoUrYXCaFeWjCLrcD0UHAyaVcS2HNYfn87D2rdCnRJ3W5x4Du5AWw/exec";
 
     // Mobile Number Validation Function
     function validateMobileNumber(input) {
-      // Remove any non-digit characters
       input.value = input.value.replace(/\D/g, '');
-      
-      // Limit to 10 digits
       if (input.value.length > 10) {
         input.value = input.value.slice(0, 10);
       }
@@ -467,17 +468,39 @@
     }
 
     // Search Customer Function
-    function searchCustomer() {
-      const searchValue = document.getElementById("search").value.trim();
-      if (searchValue) {
-        alert(`Searching for: ${searchValue} (Name/Mobile/Aadhaar)`);
-      } else {
+    async function searchCustomer() {
+      const searchValue = searchInput.value.trim();
+      if (!searchValue) {
         alert("Please enter a search term (Name, Mobile, or Aadhaar).");
+        return;
+      }
+
+      try {
+        // Using CORS proxy to bypass CORS restrictions
+        const response = await fetch(`https://cors-anywhere.herokuapp.com/${SCRIPT_URL}?action=search&query=${encodeURIComponent(searchValue)}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const data = await response.json();
+        if (data.error) {
+          alert(`Error: ${data.error}`);
+        } else if (data.results && data.results.length > 0) {
+          const results = data.results.map(customer => 
+            `Name: ${customer.name}, Mobile: ${customer.mobile}, Aadhaar: ${customer.aadhaar}, Account: ${customer.accountNumber}, Customer ID: ${customer.customerId}, Address: ${customer.address}`
+          ).join('\n');
+          alert(`Found customers:\n${results}`);
+        } else {
+          alert("No customers found.");
+        }
+      } catch (error) {
+        alert("Error searching customer: " + error.message + "\nPlease ensure CORS proxy is active (visit https://cors-anywhere.herokuapp.com/) or use a CORS Unblock extension.");
       }
     }
 
     // Add Customer Function with Validation
-    function addCustomer() {
+    async function addCustomer() {
       const name = nameInput.value.trim();
       const mobile = mobileInput.value.trim();
       const accountNumber = accountNumberInput.value.trim();
@@ -511,17 +534,39 @@
         return;
       }
 
-      // Success
-      alert("Customer added successfully!");
-      // Clear form
-      nameInput.value = "";
-      mobileInput.value = "";
-      accountNumberInput.value = "";
-      customerIdInput.value = "";
-      aadhaarInput.value = "";
-      addressInput.value = "";
-      // Return to Home
-      goBack();
+      // Prepare data to send
+      const customerData = {
+        action: "add",
+        name,
+        mobile,
+        accountNumber,
+        customerId,
+        aadhaar,
+        address
+      };
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors", // Required for Google Apps Script
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(customerData)
+        });
+        alert("Customer added successfully!");
+        // Clear form
+        nameInput.value = "";
+        mobileInput.value = "";
+        accountNumberInput.value = "";
+        customerIdInput.value = "";
+        aadhaarInput.value = "";
+        addressInput.value = "";
+        // Return to Home
+        goBack();
+      } catch (error) {
+        alert("Error adding customer: " + error.message);
+      }
     }
 
     // Ensure layout on load
