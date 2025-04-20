@@ -29,6 +29,7 @@
       --font-size-lg: clamp(1.8rem, 5vw, 2.2rem);
       --font-size-md: clamp(1.4rem, 4vw, 1.6rem);
       --font-size-base: clamp(0.9rem, 3vw, 1rem);
+      --navbar-height: 60px; /* Fixed navbar height */
     }
 
     *, *:before, *:after {
@@ -41,7 +42,7 @@
       top: 0;
       left: 0;
       right: 0;
-      background: rgba(255, 255, 255, 0.95);
+      background: linear-gradient(135deg, rgba(248, 248, 248, 0.9) 0%, rgba(251, 188, 9, 0.9) 100%);
       backdrop-filter: blur(5px);
       padding: var(--spacing-sm);
       display: flex;
@@ -49,6 +50,7 @@
       gap: var(--spacing-sm);
       z-index: 1000;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      height: var(--navbar-height);
     }
 
     .navbar button {
@@ -74,7 +76,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      height: calc(100vh - var(--navbar-height));
       text-align: center;
       padding: var(--spacing-md);
       background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, var(--pnb-burgundy) 0%, var(--pnb-yellow) 100%);
@@ -267,6 +269,9 @@
 
     /* Responsive Design */
     @media (max-width: 600px) {
+      :root {
+        --navbar-height: 120px; /* Adjusted for vertical buttons */
+      }
       .navbar {
         flex-direction: column;
         align-items: center;
@@ -280,6 +285,7 @@
       }
       .main {
         padding: 0.5rem;
+        height: calc(100vh - var(--navbar-height));
       }
       .form-container, .content-container {
         max-width: 95%;
