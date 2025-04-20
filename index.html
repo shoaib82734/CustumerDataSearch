@@ -13,10 +13,11 @@
     body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
+      height: 100vh;
       font-family: 'Poppins', 'Arial', sans-serif;
       background: linear-gradient(135deg, #f8f8f8 0%, #FBBC09 100%);
       box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     :root {
@@ -73,12 +74,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       text-align: center;
       padding: var(--spacing-md);
-      margin-top: 50px;
       background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, var(--pnb-burgundy) 0%, var(--pnb-yellow) 100%);
       color: white;
+      overflow: hidden;
     }
 
     .main h1, .main label {
@@ -257,7 +258,6 @@
       text-align: center;
       padding: var(--spacing-md);
       font-size: var(--font-size-base);
-      margin-top: var(--spacing-md);
     }
 
     /* Prevent Scrolling on Form Page Only */
@@ -279,7 +279,6 @@
         font-size: clamp(0.8rem, 2.5vw, 0.9rem);
       }
       .main {
-        margin-top: 120px;
         padding: 0.5rem;
       }
       .form-container, .content-container {
@@ -393,7 +392,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: example@example.com</p>
+    <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: cscshoaib123@gmail.com</p>
     <p>© 2025 PNB Mini Branch. All rights reserved.</p>
   </footer>
 
@@ -495,34 +494,6 @@
       customers.push({ name, mobile, accountNumber, customerId, address });
       localStorage.setItem("customers", JSON.stringify(customers));
 
-      // Placeholder for Google Sheets API (to be added tomorrow)
-      /*
-      fetch('https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Sheet1!A:E:append?valueInputOption=RAW', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          values: [[name, mobile, accountNumber, customerId, address]]
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        formError.textContent = "Customer added successfully!";
-        formError.style.color = "green";
-        formError.style.display = "block";
-        customerForm.reset();
-        formSpinner.style.display = "none";
-        setTimeout(goBack, 2000);
-      })
-      .catch(error => {
-        formError.textContent = "Error adding customer!";
-        formError.style.display = "block";
-        formSpinner.style.display = "none";
-      });
-      */
-
       // Temporary success message
       setTimeout(() => {
         formError.textContent = "Customer added successfully!";
@@ -548,7 +519,7 @@
         return;
       }
 
-      // Temporary localStorage search (until Google API)
+      // Temporary localStorage search
       let customers = JSON.parse(localStorage.getItem("customers") || "[]");
       let results = customers.filter(c =>
         c.name.toLowerCase().includes(query) ||
