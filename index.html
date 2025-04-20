@@ -376,7 +376,7 @@
         </tr>
         <tr>
           <td>Mobile Number</td>
-          <td><input type="tel" id="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" aria-required="true"></td>
+          <td><input type="tel" id="mobile" placeholder="Mobile Number" maxlength="10" oninput="validateMobileNumber(this)" aria-required="true"></td>
         </tr>
         <tr>
           <td>Account Number</td>
@@ -441,6 +441,17 @@
     const aadhaarInput = document.getElementById("aadhaar");
     const addressInput = document.getElementById("address");
 
+    // Mobile Number Validation Function
+    function validateMobileNumber(input) {
+      // Remove any non-digit characters
+      input.value = input.value.replace(/\D/g, '');
+      
+      // Limit to 10 digits
+      if (input.value.length > 10) {
+        input.value = input.value.slice(0, 10);
+      }
+    }
+
     // Show Page Function
     function showPage(pageId) {
       mainSection.style.display = "none";
@@ -465,7 +476,7 @@
       }
     }
 
-    // Add Customer Function with Validation and Fix
+    // Add Customer Function with Validation
     function addCustomer() {
       const name = nameInput.value.trim();
       const mobile = mobileInput.value.trim();
