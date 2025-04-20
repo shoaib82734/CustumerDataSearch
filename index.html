@@ -47,6 +47,11 @@
       text-align: center;
       background: var(--pnb-burgundy);
       color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 2000;
     }
 
     #passwordScreen h1 {
@@ -91,7 +96,7 @@
       right: 0;
       background: linear-gradient(135deg, rgba(248, 248, 248, 0.9) 0%, rgba(251, 188, 9, 0.9) 100%);
       padding: var(--spacing-xs);
-      display: flex;
+      display: none;
       justify-content: center;
       gap: var(--spacing-xs);
       z-index: 1000;
@@ -121,24 +126,25 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       height: calc(100vh - var(--navbar-height) - var(--footer-height));
       text-align: center;
-      padding: var(--spacing-xs);
+      padding: var(--spacing-md);
       background: var(--pnb-burgundy);
       color: white;
       overflow: auto;
+      margin-top: var(--navbar-height);
     }
 
     .main h1 {
       font-size: var(--font-size-lg);
-      margin: var(--spacing-xs) 0;
+      margin: var(--spacing-xs) 0 var(--spacing-md);
     }
 
     .form-group {
       width: 100%;
       max-width: 350px;
-      margin: var(--spacing-xs) 0;
+      margin: var(--spacing-sm) 0;
     }
 
     .form-group label {
@@ -146,11 +152,12 @@
       color: white;
       line-height: 1.2;
       display: block;
+      margin-bottom: var(--spacing-xs);
     }
 
     .form-group input {
       width: 100%;
-      padding: 0.3rem;
+      padding: 0.5rem;
       margin: var(--spacing-xs) 0;
       border-radius: 6px;
       border: 1px solid #ccc;
@@ -160,38 +167,45 @@
     }
 
     .form-group input:focus {
-      border-color: var(--pnb-burgundy);
+      border-color: var(--pnb-yellow);
       outline: none;
     }
 
     button {
-      padding: 0.3rem 0.8rem;
+      padding: 0.5rem 1rem;
       background: var(--pnb-yellow);
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       font-size: var(--font-size-base);
-      margin: var(--spacing-xs) 0;
+      margin: var(--spacing-sm) 0;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       transition: background 0.3s;
-      min-width: 90px;
+      min-width: 120px;
     }
 
     button:hover {
       background: #E6A700;
     }
 
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+
     /* Hide Pages Initially */
     .page {
       display: none;
       padding: var(--spacing-md);
-      min-height: 100vh;
+      min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
       opacity: 0;
       transition: opacity 0.3s ease;
+      margin-top: var(--navbar-height);
+      width: 100%;
     }
 
-    .page[style*="block"] {
+    .page.active {
       opacity: 1;
     }
 
@@ -200,31 +214,27 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      justify-content: flex-start;
       width: 100%;
-      padding: var(--spacing-md) var(--spacing-sm) var(--spacing-sm);
       text-align: center;
       background: var(--pnb-burgundy);
-    }
-
-    .form-container {
-      max-width: 90%;
-      width: 100%;
-      max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
-      margin: 0 auto;
-      background: white;
-      padding: var(--spacing-sm);
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      overflow-y: auto;
     }
 
     #addCustomer h2 {
       font-size: var(--font-size-lg);
       font-weight: 600;
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
       color: white;
+    }
+
+    .form-container {
+      max-width: 800px;
+      width: 100%;
+      background: white;
+      padding: var(--spacing-md);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin: 0 auto;
     }
 
     #addCustomer table {
@@ -234,7 +244,7 @@
     }
 
     #addCustomer th, #addCustomer td {
-      padding: var(--spacing-xs);
+      padding: var(--spacing-sm);
       text-align: left;
       border: 1px solid #ddd;
     }
@@ -242,11 +252,16 @@
     #addCustomer th {
       background-color: var(--pnb-burgundy);
       color: white;
+      width: 30%;
+    }
+
+    #addCustomer td {
+      width: 70%;
     }
 
     #addCustomer td input {
       width: 100%;
-      padding: 0.3rem;
+      padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       font-size: var(--font-size-base);
@@ -255,14 +270,14 @@
     /* Search Results Table */
     #searchResults {
       display: none;
-      width: 90%;
-      max-width: 800px;
+      width: 100%;
+      max-width: 900px;
       margin: var(--spacing-md) auto;
       background: white;
       padding: var(--spacing-sm);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      max-height: 50vh;
+      max-height: 60vh;
       overflow-y: auto;
     }
 
@@ -273,14 +288,17 @@
     }
 
     #searchResults th, #searchResults td {
-      padding: var(--spacing-xs);
+      padding: var(--spacing-sm);
       text-align: left;
       border: 1px solid #ddd;
+      font-size: var(--font-size-base);
     }
 
     #searchResults th {
       background-color: var(--pnb-burgundy);
       color: white;
+      position: sticky;
+      top: 0;
     }
 
     #searchResults td {
@@ -289,21 +307,20 @@
 
     /* About Us Page */
     #aboutUs {
-      min-height: 100vh;
-      padding: var(--spacing-md) var(--spacing-md) var(--spacing-md);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      width: 100%;
       text-align: center;
       background: var(--pnb-burgundy);
     }
 
     .content-container {
-      max-width: 90%;
+      max-width: 800px;
       width: 100%;
       background: white;
-      padding: var(--spacing-sm);
+      padding: var(--spacing-md);
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       margin: 0 auto;
@@ -312,7 +329,7 @@
     #aboutUs h2 {
       font-size: var(--font-size-lg);
       font-weight: 600;
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
       color: #333;
     }
 
@@ -328,15 +345,6 @@
       font-weight: 600;
     }
 
-    #aboutUs[style*="block"] .content-container {
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     /* Footer */
     footer {
       position: fixed;
@@ -345,10 +353,17 @@
       background: var(--pnb-burgundy);
       color: white;
       text-align: center;
-      padding: var(--spacing-xs);
+      padding: var(--spacing-sm);
       font-size: var(--font-size-base);
       height: var(--footer-height);
       z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    footer p {
+      margin: 0.2rem 0;
     }
 
     .page footer {
@@ -356,71 +371,104 @@
       z-index: 1;
     }
 
+    /* Status Messages */
+    .status-message {
+      padding: var(--spacing-sm);
+      margin: var(--spacing-sm) 0;
+      border-radius: 4px;
+      font-size: var(--font-size-base);
+      display: none;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin: 20px auto;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--pnb-yellow);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Responsive Design */
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       :root {
-        --navbar-height: 120px;
+        --navbar-height: 70px;
         --footer-height: 90px;
         --font-size-lg: clamp(1.5rem, 4vw, 1.8rem);
         --font-size-base: clamp(0.9rem, 2.5vw, 1.1rem);
       }
+
       .navbar {
-        flex-direction: column;
-        align-items: center;
+        flex-wrap: wrap;
+        height: auto;
         padding: 0.3rem;
-        height: var(--navbar-height);
       }
+
       .navbar button {
-        width: 80%;
-        margin: 0.2rem 0;
+        width: 45%;
+        margin: 0.2rem;
         padding: 0.4rem;
         font-size: var(--font-size-base);
       }
-      .main {
+
+      .main, .page {
+        padding: var(--spacing-sm);
         height: calc(100vh - var(--navbar-height) - var(--footer-height));
-        padding: 0.3rem;
       }
-      .form-group {
-        max-width: 100%;
-      }
-      .form-group input {
-        font-size: var(--font-size-base);
-        padding: 0.3rem;
-      }
-      button {
-        font-size: var(--font-size-base);
-        padding: 0.3rem 0.6rem;
-      }
-      h1 {
-        font-size: var(--font-size-lg);
-      }
-      footer {
-        font-size: var(--font-size-base);
-        padding: 0.3rem;
-        height: var(--footer-height);
-      }
+
       .form-container, .content-container, #searchResults {
         max-width: 95%;
-        padding: 0.3rem;
-        max-height: calc(100vh - var(--navbar-height) - var(--footer-height));
+        padding: var(--spacing-sm);
       }
-      #addCustomer {
-        padding-top: calc(var(--spacing-md) + 1rem);
-      }
-      #aboutUs {
-        padding-top: calc(var(--spacing-md) + 1rem);
-      }
+
       #addCustomer table, #searchResults table {
         font-size: var(--font-size-base);
       }
+
+      #addCustomer th, #addCustomer td {
+        padding: 0.3rem;
+        display: block;
+        width: 100%;
+      }
+
+      #addCustomer tr {
+        margin-bottom: var(--spacing-sm);
+        display: block;
+      }
     }
 
-    @media (min-width: 601px) {
-      .navbar {
-        flex-direction: row;
+    @media (max-width: 480px) {
+      :root {
+        --navbar-height: 80px;
       }
+
       .navbar button {
-        width: auto;
+        width: 90%;
+      }
+
+      #searchResults table {
+        display: block;
+        overflow-x: auto;
       }
     }
   </style>
@@ -431,7 +479,7 @@
     <h1>PNB Mini Branch</h1>
     <div class="form-group">
       <label for="password">Enter Password</label>
-      <input type="password" id="password" placeholder="Password" aria-required="true">
+      <input type="password" id="password" placeholder="Password" aria-required="true" autocomplete="off">
     </div>
     <button onclick="checkPassword()">Submit</button>
   </div>
@@ -451,13 +499,15 @@
       <input type="text" id="search" placeholder="Enter Name, Mobile, or Aadhaar" aria-required="true">
     </div>
     <button onclick="searchCustomer()">Search</button>
+    <div id="searchStatus" class="status-message"></div>
+    <div id="loadingSpinner" class="spinner"></div>
     <div id="searchResults">
       <table>
         <thead>
           <tr>
             <th>Name</th>
             <th>Mobile</th>
-            <th>Account Number</th>
+            <th>Account No.</th>
             <th>Customer ID</th>
             <th>Aadhaar</th>
             <th>Father Name</th>
@@ -472,38 +522,35 @@
   <div class="page" id="addCustomer" role="region" aria-label="Add customer form">
     <h2>Add New Customer</h2>
     <div class="form-container">
+      <div id="addCustomerStatus" class="status-message"></div>
       <table>
         <tr>
-          <th>Field</th>
-          <th>Input</th>
-        </tr>
-        <tr>
-          <td>Customer Name</td>
+          <th>Customer Name</th>
           <td><input type="text" id="name" placeholder="Customer Name" aria-required="true" oninput="validateName(this)"></td>
         </tr>
         <tr>
-          <td>Mobile Number</td>
+          <th>Mobile Number</th>
           <td><input type="tel" id="mobile" placeholder="Mobile Number" maxlength="10" oninput="validateMobileNumber(this)" aria-required="true"></td>
         </tr>
         <tr>
-          <td>Account Number</td>
+          <th>Account Number</th>
           <td><input type="text" id="accountNumber" placeholder="16-digit Account Number" maxlength="16" oninput="validateNumberInput(this, 16)" aria-required="true"></td>
         </tr>
         <tr>
-          <td>Customer ID</td>
+          <th>Customer ID</th>
           <td><input type="text" id="customerId" placeholder="e.g., A12345678" maxlength="9" oninput="validateCustomerId(this)" aria-required="true"></td>
         </tr>
         <tr>
-          <td>Aadhaar Number</td>
+          <th>Aadhaar Number</th>
           <td><input type="text" id="aadhaar" placeholder="12-digit Aadhaar Number" maxlength="12" oninput="validateNumberInput(this, 12)" aria-required="true"></td>
         </tr>
         <tr>
-          <td>Father Name</td>
+          <th>Father Name</th>
           <td><input type="text" id="fatherName" placeholder="Father Name" aria-required="true" oninput="validateName(this)"></td>
         </tr>
         <tr>
           <td colspan="2" style="text-align: center;">
-            <button type="button" onclick="addCustomer()">Add Customer</button>
+            <button type="button" onclick="addCustomer()" id="addCustomerBtn">Add Customer</button>
             <button type="button" onclick="goBack()">Back to Home</button>
           </td>
         </tr>
@@ -544,6 +591,7 @@
     // Cached DOM Elements
     const passwordScreen = document.getElementById('passwordScreen');
     const mainSection = document.getElementById('mainSection');
+    const navbar = document.querySelector('.navbar');
     const pages = document.querySelectorAll('.page');
     const nameInput = document.getElementById('name');
     const mobileInput = document.getElementById('mobile');
@@ -555,9 +603,13 @@
     const searchResults = document.getElementById('searchResults');
     const searchResultsBody = document.getElementById('searchResultsBody');
     const passwordInput = document.getElementById('password');
+    const searchStatus = document.getElementById('searchStatus');
+    const addCustomerStatus = document.getElementById('addCustomerStatus');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const addCustomerBtn = document.getElementById('addCustomerBtn');
 
-    // Password Hash
-    const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('yourpassword123').toString();
+    // Password Hash - CHANGE THIS TO YOUR DESIRED PASSWORD
+    const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('admin@123').toString();
 
     // Encrypt Password
     function hashPassword(password) {
@@ -567,14 +619,33 @@
     // Password Check
     function checkPassword() {
       const enteredPassword = passwordInput.value.trim();
+      if (!enteredPassword) {
+        showMessage(passwordInput, 'Please enter a password', 'error');
+        return;
+      }
+      
       const enteredPasswordHash = hashPassword(enteredPassword);
       if (enteredPasswordHash === CORRECT_PASSWORD_HASH) {
         passwordScreen.style.display = 'none';
+        navbar.style.display = 'flex';
         mainSection.style.display = 'flex';
+        searchInput.focus();
       } else {
-        alert('Incorrect password. Please try again.');
+        showMessage(passwordInput, 'Incorrect password. Please try again.', 'error');
         passwordInput.value = '';
+        passwordInput.focus();
       }
+    }
+
+    // Show status message
+    function showMessage(element, message, type) {
+      const statusElement = element.id === 'search' ? searchStatus : addCustomerStatus;
+      statusElement.textContent = message;
+      statusElement.className = 'status-message ' + type;
+      setTimeout(() => {
+        statusElement.className = 'status-message';
+        statusElement.textContent = '';
+      }, 5000);
     }
 
     // Enter Key Support
@@ -585,16 +656,35 @@
     // Show Page
     function showPage(pageId) {
       mainSection.style.display = 'none';
-      pages.forEach(p => p.style.display = 'none');
-      document.getElementById(pageId).style.display = 'block';
+      searchResults.style.display = 'none';
+      searchStatus.className = 'status-message';
+      pages.forEach(p => {
+        p.style.display = 'none';
+        p.classList.remove('active');
+      });
+      
+      const page = document.getElementById(pageId);
+      page.style.display = 'flex';
+      setTimeout(() => page.classList.add('active'), 10);
+      window.scrollTo(0, 0);
+      
+      // Focus on first input if available
+      const firstInput = page.querySelector('input');
+      if (firstInput) firstInput.focus();
     }
 
     // Go Back
     function goBack() {
-      pages.forEach(p => p.style.display = 'none');
+      pages.forEach(p => {
+        p.style.display = 'none';
+        p.classList.remove('active');
+      });
       searchResults.style.display = 'none';
+      searchStatus.className = 'status-message';
       mainSection.style.display = 'flex';
+      setTimeout(() => mainSection.classList.add('active'), 10);
       window.scrollTo(0, 0);
+      searchInput.focus();
     }
 
     // Validate Inputs
@@ -621,38 +711,51 @@
     async function searchCustomer() {
       const searchValue = searchInput.value.trim();
       if (!searchValue) {
-        alert('Please enter a search term (Name, Mobile, or Aadhaar).');
+        showMessage(searchInput, 'Please enter a search term (Name, Mobile, or Aadhaar).', 'error');
         return;
       }
 
       try {
+        loadingSpinner.style.display = 'block';
+        searchResults.style.display = 'none';
+        searchStatus.className = 'status-message';
+        
         const response = await fetch(`${API_URL}?action=search&query=${encodeURIComponent(searchValue)}`, {
           method: 'GET'
         });
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
         const results = await response.json();
         searchResultsBody.innerHTML = '';
+        
         if (results.length > 0) {
           results.forEach(customer => {
             const row = document.createElement('tr');
             row.innerHTML = `
-              <td>${customer.name || ''}</td>
-              <td>${customer.mobile || ''}</td>
-              <td>${customer.accountNumber || ''}</td>
-              <td>${customer.customerId || ''}</td>
-              <td>${customer.aadhaar || ''}</td>
-              <td>${customer.fatherName || ''}</td>
+              <td>${customer.name || '-'}</td>
+              <td>${customer.mobile || '-'}</td>
+              <td>${customer.accountNumber || '-'}</td>
+              <td>${customer.customerId || '-'}</td>
+              <td>${customer.aadhaar || '-'}</td>
+              <td>${customer.fatherName || '-'}</td>
             `;
             searchResultsBody.appendChild(row);
           });
           searchResults.style.display = 'block';
+          showMessage(searchInput, `Found ${results.length} customer(s)`, 'success');
         } else {
-          searchResultsBody.innerHTML = '<tr><td colspan="6">No customers found.</td></tr>';
+          searchResultsBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No customers found matching your search.</td></tr>';
           searchResults.style.display = 'block';
+          showMessage(searchInput, 'No customers found', 'error');
         }
       } catch (error) {
-        alert('Error searching customer: ' + error.message);
         console.error('Search Error:', error);
+        showMessage(searchInput, 'Error searching customers. Please try again.', 'error');
+      } finally {
+        loadingSpinner.style.display = 'none';
       }
     }
 
@@ -665,28 +768,40 @@
       const aadhaar = aadhaarInput.value.trim();
       const fatherName = fatherNameInput.value.trim();
 
-      if (!name || !/^[A-Za-z\s]+$/.test(name)) {
-        alert('Name must contain only letters and spaces.');
+      // Validate inputs
+      if (!name || !/^[A-Za-z\s]{3,}$/.test(name)) {
+        showMessage(nameInput, 'Name must contain only letters and spaces (minimum 3 characters).', 'error');
+        nameInput.focus();
         return;
       }
+      
       if (!mobile || !/^\d{10}$/.test(mobile)) {
-        alert('Mobile number must be exactly 10 digits.');
+        showMessage(mobileInput, 'Mobile number must be exactly 10 digits.', 'error');
+        mobileInput.focus();
         return;
       }
+      
       if (!accountNumber || !/^\d{16}$/.test(accountNumber)) {
-        alert('Account number must be exactly 16 digits.');
+        showMessage(accountNumberInput, 'Account number must be exactly 16 digits.', 'error');
+        accountNumberInput.focus();
         return;
       }
+      
       if (!customerId || !/^[A-Za-z][0-9]{8}$/.test(customerId)) {
-        alert('Customer ID must be 9 characters, starting with a letter followed by 8 digits.');
+        showMessage(customerIdInput, 'Customer ID must be 9 characters, starting with a letter followed by 8 digits.', 'error');
+        customerIdInput.focus();
         return;
       }
+      
       if (!aadhaar || !/^\d{12}$/.test(aadhaar)) {
-        alert('Aadhaar number must be exactly 12 digits.');
+        showMessage(aadhaarInput, 'Aadhaar number must be exactly 12 digits.', 'error');
+        aadhaarInput.focus();
         return;
       }
-      if (!fatherName || !/^[A-Za-z\s]+$/.test(fatherName)) {
-        alert('Father Name must contain only letters and spaces.');
+      
+      if (!fatherName || !/^[A-Za-z\s]{3,}$/.test(fatherName)) {
+        showMessage(fatherNameInput, 'Father Name must contain only letters and spaces (minimum 3 characters).', 'error');
+        fatherNameInput.focus();
         return;
       }
 
@@ -711,35 +826,54 @@
       };
 
       try {
+        addCustomerBtn.disabled = true;
+        addCustomerBtn.textContent = 'Processing...';
+        
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(customerData)
         });
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
         const result = await response.json();
+        
         if (result.status === 'success') {
-          alert('Customer added successfully!');
+          showMessage(nameInput, 'Customer added successfully!', 'success');
+          // Clear form
           nameInput.value = '';
           mobileInput.value = '';
           accountNumberInput.value = '';
           customerIdInput.value = '';
           aadhaarInput.value = '';
           fatherNameInput.value = '';
-          goBack();
+          setTimeout(goBack, 2000);
         } else {
           throw new Error(result.message || 'Failed to add customer');
         }
       } catch (error) {
-        alert('Error adding customer: ' + error.message);
         console.error('Add Customer Error:', error);
+        showMessage(nameInput, 'Error adding customer: ' + (error.message || 'Please try again later.'), 'error');
+      } finally {
+        addCustomerBtn.disabled = false;
+        addCustomerBtn.textContent = 'Add Customer';
       }
     }
 
-    // Ensure layout on load
+    // Initialize application
     window.addEventListener('load', () => {
       passwordScreen.style.display = 'flex';
       mainSection.style.display = 'none';
+      navbar.style.display = 'none';
+      passwordInput.focus();
+      
+      // Add event listeners for search input
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchCustomer();
+      });
     });
   </script>
 </body>
