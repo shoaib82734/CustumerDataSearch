@@ -9,7 +9,6 @@
   <title>PNB Mini Branch</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <style>
     body, html {
       margin: 0;
@@ -37,58 +36,6 @@
       box-sizing: inherit;
     }
 
-    /* Password Screen */
-    #passwordScreen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      background: var(--pnb-burgundy);
-      color: white;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 2000;
-    }
-
-    #passwordScreen h1 {
-      font-size: var(--font-size-lg);
-      margin-bottom: var(--spacing-md);
-    }
-
-    #passwordScreen .form-group {
-      width: 100%;
-      max-width: 300px;
-      margin: var(--spacing-sm) 0;
-    }
-
-    #passwordScreen input {
-      width: 100%;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: var(--font-size-base);
-    }
-
-    #passwordScreen button {
-      padding: 0.5rem 1rem;
-      background: var(--pnb-yellow);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: var(--font-size-base);
-      margin-top: var(--spacing-sm);
-    }
-
-    #passwordScreen button:hover {
-      background: #E6A700;
-    }
-
-    /* Navigation Bar */
     .navbar {
       position: fixed;
       top: 0;
@@ -96,7 +43,7 @@
       right: 0;
       background: linear-gradient(135deg, rgba(248, 248, 248, 0.9) 0%, rgba(251, 188, 9, 0.9) 100%);
       padding: var(--spacing-xs);
-      display: none;
+      display: flex;
       justify-content: center;
       gap: var(--spacing-xs);
       z-index: 1000;
@@ -121,9 +68,8 @@
       background: #6B001F;
     }
 
-    /* Center Main Content */
     .main {
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
@@ -194,7 +140,6 @@
       cursor: not-allowed;
     }
 
-    /* Hide Pages Initially */
     .page {
       display: none;
       padding: var(--spacing-md);
@@ -209,7 +154,6 @@
       opacity: 1;
     }
 
-    /* Add Customer Form */
     #addCustomer {
       display: flex;
       flex-direction: column;
@@ -267,7 +211,6 @@
       font-size: var(--font-size-base);
     }
 
-    /* Search Results Table */
     #searchResults {
       display: none;
       width: 100%;
@@ -305,7 +248,6 @@
       color: #333;
     }
 
-    /* About Us Page */
     #aboutUs {
       display: flex;
       flex-direction: column;
@@ -345,7 +287,6 @@
       font-weight: 600;
     }
 
-    /* Footer */
     footer {
       position: fixed;
       bottom: 0;
@@ -371,7 +312,6 @@
       z-index: 1;
     }
 
-    /* Status Messages */
     .status-message {
       padding: var(--spacing-sm);
       margin: var(--spacing-sm) 0;
@@ -392,7 +332,6 @@
       display: block;
     }
 
-    /* Loading Spinner */
     .spinner {
       display: none;
       width: 40px;
@@ -409,7 +348,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
       :root {
         --navbar-height: 70px;
@@ -474,24 +412,12 @@
   </style>
 </head>
 <body>
-  <!-- Password Screen -->
-  <div id="passwordScreen">
-    <h1>PNB Mini Branch</h1>
-    <div class="form-group">
-      <label for="password">Enter Password</label>
-      <input type="password" id="password" placeholder="Password" aria-required="true" autocomplete="off">
-    </div>
-    <button onclick="checkPassword()">Submit</button>
-  </div>
-
-  <!-- Navigation Bar -->
   <nav class="navbar" role="navigation" aria-label="Main navigation">
     <button onclick="goBack()">Home</button>
     <button onclick="showPage('addCustomer')">Add Customer</button>
     <button onclick="showPage('aboutUs')">About Us</button>
   </nav>
 
-  <!-- Main Content -->
   <div class="main" id="mainSection" role="main" aria-label="Main content">
     <h1>Welcome to PNB Mini Branch</h1>
     <div class="form-group">
@@ -506,11 +432,12 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>Mobile</th>
-            <th>Account No.</th>
-            <th>Customer ID</th>
-            <th>Aadhaar</th>
             <th>Father Name</th>
+            <th>Account No.</th>
+            <th>Aadhaar</th>
+            <th>Customer ID</th>
+            <th>Mobile</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="searchResultsBody"></tbody>
@@ -518,9 +445,8 @@
     </div>
   </div>
 
-  <!-- Add Customer Page -->
   <div class="page" id="addCustomer" role="region" aria-label="Add customer form">
-    <h2>Add New Customer</h2>
+    <h2 id="formTitle">Add New Customer</h2>
     <div class="form-container">
       <div id="addCustomerStatus" class="status-message"></div>
       <table>
@@ -529,28 +455,29 @@
           <td><input type="text" id="name" placeholder="Customer Name" aria-required="true" oninput="validateName(this)"></td>
         </tr>
         <tr>
-          <th>Mobile Number</th>
-          <td><input type="tel" id="mobile" placeholder="Mobile Number" maxlength="10" oninput="validateMobileNumber(this)" aria-required="true"></td>
+          <th>Father Name</th>
+          <td><input type="text" id="fatherName" placeholder="Father Name" aria-required="true" oninput="validateName(this)"></td>
         </tr>
         <tr>
           <th>Account Number</th>
           <td><input type="text" id="accountNumber" placeholder="16-digit Account Number" maxlength="16" oninput="validateNumberInput(this, 16)" aria-required="true"></td>
         </tr>
         <tr>
-          <th>Customer ID</th>
-          <td><input type="text" id="customerId" placeholder="e.g., A12345678" maxlength="9" oninput="validateCustomerId(this)" aria-required="true"></td>
-        </tr>
-        <tr>
           <th>Aadhaar Number</th>
           <td><input type="text" id="aadhaar" placeholder="12-digit Aadhaar Number" maxlength="12" oninput="validateNumberInput(this, 12)" aria-required="true"></td>
         </tr>
         <tr>
-          <th>Father Name</th>
-          <td><input type="text" id="fatherName" placeholder="Father Name" aria-required="true" oninput="validateName(this)"></td>
+          <th>Customer ID</th>
+          <td><input type="text" id="customerId" placeholder="e.g., A12345678" maxlength="9" oninput="validateCustomerId(this)" aria-required="true"></td>
+        </tr>
+        <tr>
+          <th>Mobile Number</th>
+          <td><input type="tel" id="mobile" placeholder="Mobile Number" maxlength="10" oninput="validateMobileNumber(this)" aria-required="true"></td>
         </tr>
         <tr>
           <td colspan="2" style="text-align: center;">
             <button type="button" onclick="addCustomer()" id="addCustomerBtn">Add Customer</button>
+            <button type="button" onclick="saveEditedCustomer()" id="saveEditBtn" style="display: none;">Save Changes</button>
             <button type="button" onclick="goBack()">Back to Home</button>
           </td>
         </tr>
@@ -562,7 +489,6 @@
     </footer>
   </div>
 
-  <!-- About Us Page -->
   <div class="page" id="aboutUs" role="region" aria-label="About us">
     <div class="content-container">
       <h2>About Us</h2>
@@ -578,18 +504,14 @@
     </footer>
   </div>
 
-  <!-- Footer for Home Page -->
   <footer>
     <p>Contact: Mohd Shuaib | Phone: 827344168 | Email: cscshoaib123@gmail.com</p>
     <p>© 2025 PNB Mini Branch. All rights reserved.</p>
   </footer>
 
   <script>
-    // Google Apps Script URL
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwX75DYp_URcno89Kf0GoD7OKw6Bl2yZPw7xuGfqQj9vH-SWGDzzHcz47oABXtmirI/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxmyL0-Ibu-byQ1Fp6tm27ABoT3od2McVZck35Efb61ng1tmkri9f3bfSVhS7VWETC0/exec';
 
-    // Cached DOM Elements
-    const passwordScreen = document.getElementById('passwordScreen');
     const mainSection = document.getElementById('mainSection');
     const navbar = document.querySelector('.navbar');
     const pages = document.querySelectorAll('.page');
@@ -602,42 +524,13 @@
     const searchInput = document.getElementById('search');
     const searchResults = document.getElementById('searchResults');
     const searchResultsBody = document.getElementById('searchResultsBody');
-    const passwordInput = document.getElementById('password');
     const searchStatus = document.getElementById('searchStatus');
     const addCustomerStatus = document.getElementById('addCustomerStatus');
     const loadingSpinner = document.getElementById('loadingSpinner');
     const addCustomerBtn = document.getElementById('addCustomerBtn');
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    const formTitle = document.getElementById('formTitle');
 
-    // Password Hash - CHANGE THIS TO YOUR DESIRED PASSWORD
-    const CORRECT_PASSWORD_HASH = CryptoJS.SHA256('admin@123').toString();
-
-    // Encrypt Password
-    function hashPassword(password) {
-      return CryptoJS.SHA256(password).toString();
-    }
-
-    // Password Check
-    function checkPassword() {
-      const enteredPassword = passwordInput.value.trim();
-      if (!enteredPassword) {
-        showMessage(passwordInput, 'Please enter a password', 'error');
-        return;
-      }
-      
-      const enteredPasswordHash = hashPassword(enteredPassword);
-      if (enteredPasswordHash === CORRECT_PASSWORD_HASH) {
-        passwordScreen.style.display = 'none';
-        navbar.style.display = 'flex';
-        mainSection.style.display = 'flex';
-        searchInput.focus();
-      } else {
-        showMessage(passwordInput, 'Incorrect password. Please try again.', 'error');
-        passwordInput.value = '';
-        passwordInput.focus();
-      }
-    }
-
-    // Show status message
     function showMessage(element, message, type) {
       const statusElement = element.id === 'search' ? searchStatus : addCustomerStatus;
       statusElement.textContent = message;
@@ -648,12 +541,6 @@
       }, 5000);
     }
 
-    // Enter Key Support
-    passwordInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') checkPassword();
-    });
-
-    // Show Page
     function showPage(pageId) {
       mainSection.style.display = 'none';
       searchResults.style.display = 'none';
@@ -668,12 +555,10 @@
       setTimeout(() => page.classList.add('active'), 10);
       window.scrollTo(0, 0);
       
-      // Focus on first input if available
       const firstInput = page.querySelector('input');
       if (firstInput) firstInput.focus();
     }
 
-    // Go Back
     function goBack() {
       pages.forEach(p => {
         p.style.display = 'none';
@@ -685,9 +570,22 @@
       setTimeout(() => mainSection.classList.add('active'), 10);
       window.scrollTo(0, 0);
       searchInput.focus();
+      resetForm();
     }
 
-    // Validate Inputs
+    function resetForm() {
+      nameInput.value = '';
+      mobileInput.value = '';
+      accountNumberInput.value = '';
+      customerIdInput.value = '';
+      aadhaarInput.value = '';
+      fatherNameInput.value = '';
+      formTitle.textContent = 'Add New Customer';
+      addCustomerBtn.style.display = 'inline-block';
+      saveEditBtn.style.display = 'none';
+      currentCustomerId = null;
+    }
+
     function validateName(input) {
       input.value = input.value.replace(/[^A-Za-z\s]/g, '');
     }
@@ -707,7 +605,6 @@
       }
     }
 
-    // Search Customer
     async function searchCustomer() {
       const searchValue = searchInput.value.trim();
       if (!searchValue) {
@@ -736,18 +633,19 @@
             const row = document.createElement('tr');
             row.innerHTML = `
               <td>${customer.name || '-'}</td>
-              <td>${customer.mobile || '-'}</td>
-              <td>${customer.accountNumber || '-'}</td>
-              <td>${customer.customerId || '-'}</td>
-              <td>${customer.aadhaar || '-'}</td>
               <td>${customer.fatherName || '-'}</td>
+              <td>${customer.accountNumber || '-'}</td>
+              <td>${customer.aadhaar || '-'}</td>
+              <td>${customer.customerId || '-'}</td>
+              <td>${customer.mobile || '-'}</td>
+              <td><button onclick='editCustomer(${JSON.stringify(customer)})'>Edit</button></td>
             `;
             searchResultsBody.appendChild(row);
           });
           searchResults.style.display = 'block';
-          showMessage(searchInput, `Found ${results.length} customer(s)`, 'success');
+          showMessage(searchInput, `${results.length} customer(s) found`, 'success');
         } else {
-          searchResultsBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No customers found matching your search.</td></tr>';
+          searchResultsBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No customers found.</td></tr>';
           searchResults.style.display = 'block';
           showMessage(searchInput, 'No customers found', 'error');
         }
@@ -759,8 +657,24 @@
       }
     }
 
-    // Add Customer
-    async function addCustomer() {
+    let currentCustomerId = null;
+    function editCustomer(customer) {
+      showPage('addCustomer');
+      formTitle.textContent = 'Edit Customer';
+      addCustomerBtn.style.display = 'none';
+      saveEditBtn.style.display = 'inline-block';
+      
+      nameInput.value = customer.name || '';
+      mobileInput.value = customer.mobile || '';
+      accountNumberInput.value = customer.accountNumber || '';
+      customerIdInput.value = customer.customerId || '';
+      aadhaarInput.value = customer.aadhaar || '';
+      fatherNameInput.value = customer.fatherName || '';
+      
+      currentCustomerId = customer.customerId;
+    }
+
+    async function saveEditedCustomer() {
       const name = nameInput.value.trim();
       const mobile = mobileInput.value.trim();
       const accountNumber = accountNumberInput.value.trim();
@@ -768,7 +682,6 @@
       const aadhaar = aadhaarInput.value.trim();
       const fatherName = fatherNameInput.value.trim();
 
-      // Validate inputs
       if (!name || !/^[A-Za-z\s]{3,}$/.test(name)) {
         showMessage(nameInput, 'Name must contain only letters and spaces (minimum 3 characters).', 'error');
         nameInput.focus();
@@ -776,13 +689,13 @@
       }
       
       if (!mobile || !/^\d{10}$/.test(mobile)) {
-        showMessage(mobileInput, 'Mobile number must be exactly 10 digits.', 'error');
+        showMessage(mobileInput, 'Mobile number must be 10 digits.', 'error');
         mobileInput.focus();
         return;
       }
       
       if (!accountNumber || !/^\d{16}$/.test(accountNumber)) {
-        showMessage(accountNumberInput, 'Account number must be exactly 16 digits.', 'error');
+        showMessage(accountNumberInput, 'Account number must be 16 digits.', 'error');
         accountNumberInput.focus();
         return;
       }
@@ -794,13 +707,109 @@
       }
       
       if (!aadhaar || !/^\d{12}$/.test(aadhaar)) {
-        showMessage(aadhaarInput, 'Aadhaar number must be exactly 12 digits.', 'error');
+        showMessage(aadhaarInput, 'Aadhaar number must be 12 digits.', 'error');
         aadhaarInput.focus();
         return;
       }
       
       if (!fatherName || !/^[A-Za-z\s]{3,}$/.test(fatherName)) {
-        showMessage(fatherNameInput, 'Father Name must contain only letters and spaces (minimum 3 characters).', 'error');
+        showMessage(fatherNameInput, 'Father name must contain only letters and spaces (minimum 3 characters).', 'error');
+        fatherNameInput.focus();
+        return;
+      }
+
+      const timestamp = new Date().toLocaleString('en-IN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
+      const customerData = {
+        timestamp,
+        name,
+        mobile,
+        accountNumber,
+        customerId,
+        aadhaar,
+        fatherName
+      };
+
+      try {
+        saveEditBtn.disabled = true;
+        saveEditBtn.textContent = 'Processing...';
+        
+        const response = await fetch(`${API_URL}?action=update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(customerData)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+          showMessage(nameInput, 'Customer updated successfully!', 'success');
+          resetForm();
+          setTimeout(goBack, 2000);
+        } else {
+          throw new Error(result.message || 'Failed to update customer');
+        }
+      } catch (error) {
+        console.error('Update Customer Error:', error);
+        showMessage(nameInput, 'Error updating customer: ' + (error.message || 'Please try again later.'), 'error');
+      } finally {
+        saveEditBtn.disabled = false;
+        saveEditBtn.textContent = 'Save Changes';
+      }
+    }
+
+    async function addCustomer() {
+      const name = nameInput.value.trim();
+      const mobile = mobileInput.value.trim();
+      const accountNumber = accountNumberInput.value.trim();
+      const customerId = customerIdInput.value.trim();
+      const aadhaar = aadhaarInput.value.trim();
+      const fatherName = fatherNameInput.value.trim();
+
+      if (!name || !/^[A-Za-z\s]{3,}$/.test(name)) {
+        showMessage(nameInput, 'Name must contain only letters and spaces (minimum 3 characters).', 'error');
+        nameInput.focus();
+        return;
+      }
+      
+      if (!mobile || !/^\d{10}$/.test(mobile)) {
+        showMessage(mobileInput, 'Mobile number must be 10 digits.', 'error');
+        mobileInput.focus();
+        return;
+      }
+      
+      if (!accountNumber || !/^\d{16}$/.test(accountNumber)) {
+        showMessage(accountNumberInput, 'Account number must be 16 digits.', 'error');
+        accountNumberInput.focus();
+        return;
+      }
+      
+      if (!customerId || !/^[A-Za-z][0-9]{8}$/.test(customerId)) {
+        showMessage(customerIdInput, 'Customer ID must be 9 characters, starting with a letter followed by 8 digits.', 'error');
+        customerIdInput.focus();
+        return;
+      }
+      
+      if (!aadhaar || !/^\d{12}$/.test(aadhaar)) {
+        showMessage(aadhaarInput, 'Aadhaar number must be 12 digits.', 'error');
+        aadhaarInput.focus();
+        return;
+      }
+      
+      if (!fatherName || !/^[A-Za-z\s]{3,}$/.test(fatherName)) {
+        showMessage(fatherNameInput, 'Father name must contain only letters and spaces (minimum 3 characters).', 'error');
         fatherNameInput.focus();
         return;
       }
@@ -829,7 +838,7 @@
         addCustomerBtn.disabled = true;
         addCustomerBtn.textContent = 'Processing...';
         
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${API_URL}?action=add`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(customerData)
@@ -843,13 +852,7 @@
         
         if (result.status === 'success') {
           showMessage(nameInput, 'Customer added successfully!', 'success');
-          // Clear form
-          nameInput.value = '';
-          mobileInput.value = '';
-          accountNumberInput.value = '';
-          customerIdInput.value = '';
-          aadhaarInput.value = '';
-          fatherNameInput.value = '';
+          resetForm();
           setTimeout(goBack, 2000);
         } else {
           throw new Error(result.message || 'Failed to add customer');
@@ -863,14 +866,11 @@
       }
     }
 
-    // Initialize application
     window.addEventListener('load', () => {
-      passwordScreen.style.display = 'flex';
-      mainSection.style.display = 'none';
-      navbar.style.display = 'none';
-      passwordInput.focus();
+      mainSection.style.display = 'flex';
+      navbar.style.display = 'flex';
+      searchInput.focus();
       
-      // Add event listeners for search input
       searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') searchCustomer();
       });
